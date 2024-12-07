@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>柳儿生辰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 首页装饰图片样式 */
+        .home-decoration {
+            position: fixed;
+            width: 200px;
+            height: auto;
+            z-index: -1;
+        }
+
+        .home-decoration.left-top {
+            left: 20px;
+            top: 100px;
+        }
+
+        .home-decoration.left-bottom {
+            left: 20px;
+            bottom: 100px;
+        }
+
+        .home-decoration.right-top {
+            right: 20px;
+            top: 100px;
+        }
+
+        .home-decoration.right-bottom {
+            right: 20px;
+            bottom: 100px;
+        }
+
+        /* 顶部时间组件 */
+        #current-time {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* 导航按钮 */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 50px auto;
+            max-width: 800px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* 倒计时区域 */
+        .countdown {
+            text-align: center;
+            margin: 50px auto;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: modalFade 0.3s ease;
+        }
+
+        @keyframes modalFade {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* 时间线样式 */
+        .timeline {
+            display: none;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .timeline-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .timeline-date {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-desc {
+            margin-top: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* 放大查看样式 */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .lightbox.show {
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            display: flex;
+            width: 95%;
+            height: 95%;
+            margin: 2% auto;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .lightbox-image {
+            flex: 1.5;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .lightbox-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-info {
+            flex: 1;
+            padding: 30px;
+            background-color: white;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        /* 小惊喜页面样式 */
+        .surprise {
+            display: none;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .surprise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .video-container {
+            width: 100%;
+            padding-top: 56.25%;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .surprise-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .surprise-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .surprise-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .surprise-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        /* 音乐播放按钮样式 */
+        .music-btn {
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            margin: 30px auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .music-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .lightbox-content {
+                flex-direction: column;
+            }
+            
+            .lightbox-image {
+                flex: 2;
+            }
+            
+            .lightbox-info {
+                flex: 1;
+            }
+
+            .nav-buttons {
+                padding: 0 15px;
+            }
+
+            .countdown {
+                font-size: 20px;
+                padding: 20px;
+                margin: 30px 15px;
+            }
+
+            .home-decoration {
+                width: 100px;
+            }
+        }
+        /* All existing styles remain unchanged */
+        /* 所有现有样式保持不变 */
+        /* ... */
+    </style>
+</head>
+<body>
+    <div id="current-time"></div>
+
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="showHome()">首页</button>
+        <button class="nav-btn" onclick="showTimeline()">时间线显示</button>
+        <button class="nav-btn" onclick="showSurprise()">小惊喜</button>
+    </div>
+
+    <div id="home-page">
+        <img src="image\独角兽棋子-生日快乐.png" class="home-decoration left-top">
+        <img src="image\金箔大气生日快乐.png" class="home-decoration right-top">
+        <img src="image\生日快乐蛋糕.png" class="home-decoration left-bottom">
+        <img src="image\生日快乐艺术字.png" class="home-decoration right-bottom">
+        <div class="countdown" id="countdown"></div>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="showInitialThoughts()">建站初心</button>
+        </div>
+        <img src="image\生日庆祝彩旗.png" class="home - decoration" style="bottom: 0; left: 0%; transform: translateX(50%); width: 50%; height: 50%;">
+    </div>
+
+    <div id="timeline-page" class="timeline">
+        <div class="timeline-grid">
+            <div class="timeline-item" onclick="showLightbox('', '2023年12月31日', '初遇')">
+                <div class="timeline-date">2023年12月31日</div>
+                <div class="timeline-image" style="background-color: #ddd;">暂无图片</div>
+                <div class="timeline-desc">初遇</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2023-12-02-我和蓉笙-100天纪念.png', '2023年12月02日', '这天是我们相识100天纪念日，同时也是你陪我度过的第一个生日，我很开心，也很幸福，可能就是那天，让我们对彼此有了更高的好感，为后来彼此的相爱打下了基础。我永远记得那天，我永远记得你，我永远爱你。')">
+                <div class="timeline-date">2023年12月02日</div>
+                <img src="image/2023-12-02-我和蓉笙-100天纪念.png" class="timeline-image">
+                <div class="timeline-desc">这天是我们相识100天纪念日，同时也是你陪我度过的第一个生日，我很开心，也很幸福，可能就是那天，让我们对彼此有了更高的好感，为后来彼此的相爱打下了基础。我永远记得那天，我永远记得你，我永远爱你。</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png', '2024年1月24日', '我们在跑酷途中，停在一个热气球前，一起欣赏着日落')">
+                <div class="timeline-date">2024年1月24日</div>
+                <img src="image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png" class="timeline-image">
+                <div class="timeline-desc">我们在跑酷途中，停在一个热气球前，一起欣赏着日落，我多希望时间能停留在那一刻，永远不要流逝</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年2月3日-蓉笙-两只小土豆子.png', '2024年2月3日', '我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们的快乐感染了彼此，那时候，我们笑的合不拢嘴')">
+                <div class="timeline-date">2024年2月3日</div>
+                <img src="image/2024年2月3日-蓉笙-两只小土豆子.png" class="timeline-image">
+                <div class="timeline-desc">我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们的快乐感染了彼此，那时候，我们笑的合不拢嘴</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年2月21日-蓉笙-一起看日落.jpg', '2024年2月21日', '我们一起在日落图中巡查，那时候的我还是风纪的一员，有时候我也会想，为了自己的利益，牺牲和朋友一起玩的时间，这真的值得吗……')">
+                <div class="timeline-date">2024年2月21日</div>
+                <img src="image/2024年2月21日-蓉笙-一起看日落.jpg" class="timeline-image">
+                <div class="timeline-desc">我们一起在日落图中巡查，那时候的我还是风纪的一员，有时候我也会想，为了自己的利益，牺牲和朋友一起玩的时间，这真的值得吗……</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/临时爱情图片.jpg', '2024年2月23日', '我们正式相爱啦！我永远记得那天，我永远记得你的一切，记得你所有的美好，逐渐了解你的性格，你的喜好，你的习惯，你的所有……')">
+                <div class="timeline-date">2024年2月23日</div>
+                <img src="image/临时爱情图片.jpg" class="timeline-image">
+                <div class="timeline-desc">我们正式相爱啦！我永远记得那天，我永远记得你的一切，记得你所有的美好，逐渐了解你的性格，你的喜好，你的习惯，你的所有……</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年2月25日-柳儿-生存一起睡.png', '2024年2月25日', '我们在生存中一起睡觉，如此近的距离，我的心仿佛不再属于我，不在听从我的指挥')">
+                <div class="timeline-date">2024年2月25日</div>
+                <img src="image/2024年2月25日-柳儿-生存一起睡.png" class="timeline-image">
+                <div class="timeline-desc">我们在生存中一起睡觉，如此近的距离，我的心仿佛不再属于我，不在听从我的指挥</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年3月29日-柳梦生存生存-双人比心.png', '2024年3月29日', '我们配合的那么巧妙，心形气泡冒出的那瞬间，我的心仿佛离我而去，飞向遥远的远方，飞向有你的地方')">
+                <div class="timeline-date">2024年3月29日</div>
+                <img src="image/2024年3月29日-柳梦生存生存-双人比心.png" class="timeline-image">
+                <div class="timeline-desc">我们配合的那么巧妙，心形气泡冒出的那瞬间，我的心仿佛离我而去，飞向遥远的远方，飞向有你的地方</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年3月30日-柳儿-池塘倒映着硕大的玫瑰而我的眼中只有你.png', '2024年3月30日', '那天我们一起玩了一个跑酷的地图，地图里有那么多的美景，可在我眼中，它们都不及你一丝一毫，我的眼中只有你')">
+                <div class="timeline-date">2024年3月30日</div>
+                <img src="image/2024年3月30日-柳儿-池塘倒映着硕大的玫瑰而我的眼中只有你.png" class="timeline-image">
+                <div class="timeline-desc">那天我们一起玩了一个跑酷的地图，地图里有那么多的美景，可在我眼中，它们都不及你一丝一毫，我的眼中只有你</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年6月10日-柳儿-默契度5200.png', '2024年6月10日', '我们的默契度达到5200啦！我默默许愿，让我们能一直这样默契下去，直到永远')">
+                <div class="timeline-date">2024年6月10日</div>
+                <img src="image/2024年6月10日-柳儿-默契度5200.png" class="timeline-image">
+                <div class="timeline-desc">我们的默契度达到5200啦！我默默许愿，让我们能一直这样默契下去，直到永远</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年7月16日-柳儿and呆萌的樱娃娃店门前-三只小马宝莉.png', '2024年7月16日', '那天我们一起拍摄了这张图片，仿佛我们真的成为了一家人，我多希望这一切能成真哇')">
+                <div class="timeline-date">2024年7月16日</div>
+                <img src="image/2024年7月16日-柳儿and呆萌的樱娃娃店门前-三只小马宝莉.png" class="timeline-image">
+                <div class="timeline-desc">那天我们一起拍摄了这张图片，仿佛我们真的成为了一家人，我多希望这一切能成真哇</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年7月27日-柳儿-天使与堕天使-救赎感极强.png', '2024年7月27日', '我收到了你送的安琪儿，我们一起在那张跑酷图中拍下了这张照片，它仿佛有无尽的救赎感，深入了我的内心')">
+                <div class="timeline-date">2024年7月27日</div>
+                <img src="image/2024年7月27日-柳儿-天使与堕天使-救赎感极强.png" class="timeline-image">
+                <div class="timeline-desc">我收到了你送的安琪儿，我们一起在那张跑酷图中拍下了这张照片，它仿佛有无尽的救赎感，深入了我的内心</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年8月10日-柳儿-月季花海合照.png', '2024年8月10日', '那天是七夕节，我们在这个我奋斗了那么久的地图中留下了许多回忆，虽然地图已经停止了更新，但我们的记忆依然伴随着我们奋斗下去')">
+                <div class="timeline-date">2024年8月10日</div>
+                <img src="image/2024年8月10日-柳儿-月季花海合照.png" class="timeline-image">
+                <div class="timeline-desc">那天是七夕节，我们在这个我奋斗了那么久的地图中留下了许多回忆，虽然地图已经停止了更新，但我们的记忆依然伴随着我们奋斗下去</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年10月4日-柳儿and樱-十字路口合照.png', '2024年10月4日', '那天我们在小镇，一个人扮演父亲，另一个人扮演母亲，我们三个人像是一家人，那么温馨，那么美好')">
+                <div class="timeline-date">2024年10月4日</div>
+                <img src="image/2024年10月4日-柳儿and樱-十字路口合照.png" class="timeline-image">
+                <div class="timeline-desc">那天我们在小镇，一个人扮演父亲，另一个人扮演母亲，我们三个人像是一家人，那么温馨，那么美好</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年11月29日-柳儿-树顶拍照-1305x682.png', '2024年11月29日', '我们一起在心链空间拍下了这张照，我多希望我的心能和你的心连在一起，替你承担所有的痛苦与磨难，让你能健康快乐的长大')">
+                <div class="timeline-date">2024年11月29日</div>
+                <img src="image/2024年11月29日-柳儿-树顶拍照-1305x682.png" class="timeline-image">
+                <div class="timeline-desc">我们一起在心链空间拍下了这张照，我多希望我的心能和你的心连在一起，替你承担所有的痛苦与磨难，让你能健康快乐的长大</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="surprise-page" class="surprise">
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">播放音乐</button>
+        <audio id="bgMusic" src="song\韩甜甜_小石头和孩子们-我的梦(Live).mp3"></audio>
+        <div class="surprise-grid">
+            <div class="video-container">
+                <video width="100%" height="100%" controls>
+                    <source src="videos\2024年2月23日-柳儿-表白成功.mp4" type="video/mp4">
+                    您的浏览器不支持 video 标签。
+                </video>
+            </div>
+            <div class="video-container">
+                <video width="100%" height="100%" controls>
+                    <source src="videos\2024年3月29日-柳儿-双人比心.mp4" type="video/mp4">
+                    您的浏览器不支持 video 标签。
+                </video>
+            </div>
+            <div class="video-container">
+                <video width="100%" height="100%" controls>
+                    <source src="videos\2024年7月27日-柳儿-天使与堕天使.mp4" type="video/mp4">
+                    您的浏览器不支持 video 标签。
+                </video>
+            </div>
+            <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-1.jpg', '贺图1', '')">
+                <div class="surprise-title">贺图1</div>
+                <img src="image\柳儿生日贺图-1.jpg" class="surprise-image">
+            </div>
+            <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-2.jpg', '贺图2', '')">
+                <div class="surprise-title">贺图2</div>
+                <img src="image\柳儿生日贺图-2.jpg" class="surprise-image">
+            </div>
+            <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-3.jpg', '贺图3', '')">
+                <div class="surprise-title">贺图3</div>
+                <img src="image\柳儿生日贺图-3.jpg" class="surprise-image">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="thoughts-modal">
+        <div class="modal-content" style="margin: 10% auto;">
+            <h2 class="modal-title">建站初心</h2>
+            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                <p>这封信写于2024年12月7日<br>
+                此网站的初步计划始于2024年12月5日<br>
+                计划的正式实施是在2024年12月6日<br>
+                我承认，制作的时间很短，也很草率，因此这个网站自然也不会是多么精细，必然会是一个很简陋、很粗糙的网站<br>
+                最初的设计是在纸上绘画的计划草图，而周末回家后，我便努力把它从纸上的稿件和脑海中的遐想变为现实中可以看到的、可以被交互的、真实的内容。<br>
+                我建立这个网站（虽然可能算不上网站），最多的是想给我的宝宝一个惊喜，我给不了她什么贵重的东西，也给不了什么让人羡慕的东西，这个网站不是多么精细，这点我清楚，我的水平不高，但我想尽自己所能，给她一个惊喜，我在网站内记录了我和她一路走来的许多经历，放了些许我自己制作的祝贺礼物，实际上更多的可能还是希望她能够开心吧，这或许就是我建立这个网站的初心。<br>
+                <div style="text-align: right">——2024年12月7日 晚<br>开发者：柳洛梦<br>OS：是一个小废柴</div></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <span class="close-btn" onclick="hideLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <div class="lightbox-image">
+                <img id="lightbox-img" src="">
+            </div>
+            <div class="lightbox-info">
+                <h2 id="lightbox-date"></h2>
+                <p id="lightbox-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript代码保持不变
+        // 更新当前时间
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = 
+                now.toLocaleString('zh-CN', { 
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+        }
+
+        // 计算距离下一个生日的时间
+        function updateCountdown() {
+            const now = new Date();
+            let nextBirthday = new Date(now.getFullYear(), 3, 7); // 4月7日
+
+            if (now > nextBirthday) {
+                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+            }
+
+            const diff = nextBirthday - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').textContent = 
+                `距离柳儿生日还有${days}天${hours}小时${minutes}分钟${seconds}秒`;
+        }
+
+        function showInitialThoughts() {
+            document.getElementById('thoughts-modal').style.display = 'block';
+        }
+
+        function showHome() {
+            document.getElementById('home-page').style.display = 'block';
+            document.getElementById('timeline-page').style.display = 'none';
+            document.getElementById('surprise-page').style.display = 'none';
+        }
+
+        function showTimeline() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('timeline-page').style.display = 'block';
+            document.getElementById('surprise-page').style.display = 'none';
+        }
+
+        function showSurprise() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('timeline-page').style.display = 'none';
+            document.getElementById('surprise-page').style.display = 'block';
+        }
+
+        function showLightbox(imgSrc, date, desc) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            const dateEl = document.getElementById('lightbox-date');
+            const descEl = document.getElementById('lightbox-desc');
+
+            if (imgSrc) {
+                img.src = imgSrc;
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+            
+            dateEl.textContent = date;
+            descEl.textContent = desc;
+
+            lightbox.style.display = 'block';
+            setTimeout(() => lightbox.classList.add('show'), 10);
+        }
+
+        function hideLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('show');
+            setTimeout(() => lightbox.style.display = 'none', 300);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('thoughts-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            
+            if (music.paused) {
+                music.play();
+                musicBtn.textContent = '暂停播放';
+            } else {
+                music.pause();
+                musicBtn.textContent = '继续播放';
+            }
+        }
+
+        // 初始化
+        setInterval(updateCurrentTime, 1000);
+        setInterval(updateCountdown, 1000);
+        showHome();
+    </script>
+</body>
+</html>
