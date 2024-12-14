@@ -204,6 +204,7 @@
         }
 
         .lightbox-content {
+            position: relative;
             display: flex;
             width: 95%;
             height: 95%;
@@ -218,6 +219,7 @@
             flex: 1.5;
             padding: 20px;
             background: #f8f9fa;
+            overflow: auto;
         }
 
         .lightbox-image img {
@@ -236,10 +238,10 @@
 
         .close-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             font-size: 30px;
-            color: white;
+            color: black;
             cursor: pointer;
             transition: transform 0.3s ease;
             z-index: 1001;
@@ -362,6 +364,194 @@
         /* All existing styles remain unchanged */
         /* 所有现有样式保持不变 */
         /* ... */
+
+        /* 新增样式 */
+        .floating-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1001;
+            display: none;
+            animation: fadeInOut 3s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            10%, 90% { opacity: 1; transform: translateY(0); }
+        }
+
+        .envelope {
+            position: relative;
+            width: 625px;
+            height: 325px;
+            margin: 200px auto;
+            cursor: pointer;
+            perspective: 1000px;
+            z-index: 1;
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+            backface-visibility: hidden;
+        }
+
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f0f0f0;
+            border-radius: 10px;
+            transform: rotateX(180deg);
+            backface-visibility: hidden;
+            transition: transform 0.5s ease;
+        }
+
+        .letter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            transform: translateY(-100%);
+            transition: transform 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .envelope.open .envelope-back {
+            transform: rotateX(0);
+        }
+
+        .envelope.open .letter {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .cake-container {
+            text-align: center;
+            margin: 50px auto;
+        }
+
+        .cake-image {
+            width: 300px; /* 根据需要调整大小 */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .greeting-image {
+            width: 300px; /* 根据需要调整大小 */
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        /* 侧边菜单样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px; /* 初始隐藏在左侧 */
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            transition: left 0.3s ease;
+            z-index: 1002;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1003;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+        }
+
+        /* 更新公告模态框样式 */
+        .update-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1002;
+            overflow: auto;
+        }
+
+        .update-modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .update-modal-header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .update-modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .update-modal-close:hover,
+        .update-modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -371,13 +561,14 @@
         <button class="nav-btn" onclick="showHome()">首页</button>
         <button class="nav-btn" onclick="showTimeline()">时间线显示</button>
         <button class="nav-btn" onclick="showSurprise()">小惊喜</button>
+        <button class="nav-btn" id="surpriseTwoBtn" style="display: none;" onclick="showNewSurprise()">被隐藏的小惊喜OvO</button>
     </div>
 
     <div id="home-page">
         <img src="image\独角兽棋子-生日快乐.png" class="home-decoration left-top">
         <img src="image\金箔大气生日快乐.png" class="home-decoration right-top">
         <img src="image\生日快乐蛋糕.png" class="home-decoration left-bottom">
-        <img src="image\生日快乐艺术字.png" class="home-decoration right-bottom">
+        <img src="image\生日快乐艺术.png" class="home-decoration right-bottom">
         <div class="countdown" id="countdown"></div>
         <div class="nav-buttons">
             <button class="nav-btn" onclick="showInitialThoughts()">建站初心</button>
@@ -387,7 +578,7 @@
 
     <div id="timeline-page" class="timeline">
         <div class="timeline-grid">
-            <div class="timeline-item" onclick="showLightbox('image/初遇.jpg', '2023年8月24日', '这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈的挚友')">
+            <div class="timeline-item" onclick="showLightbox('image/初遇.jpg', '2023年8月24日', '这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈��挚友')">
                 <div class="timeline-date">2023年8月24日</div>
                 <img src="image/初遇.jpg" class="timeline-image" style="height: 200px; object-fit: cover; object-position: top; mask-image: linear-gradient(to bottom, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
                 <div class="timeline-desc">这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈的挚友</div>
@@ -402,7 +593,7 @@
                 <img src="image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png" class="timeline-image">
                 <div class="timeline-desc">我们在跑酷途中，停在一个热气球前，一起欣赏着日落，我多希望时间能停留在那一刻，永远不要流逝</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年2月3日-蓉笙-两只小土豆子.png', '2024年2月3日', '我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们的快乐感染了彼此，那时候，我们笑的合不拢嘴')">
+            <div class="timeline-item" onclick="showLightbox('image/2024年2月3日-蓉笙-两只小土豆子.png', '2024年2月3日', '我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们快乐感染了彼此，那时候，我们笑的合不拢嘴')">
                 <div class="timeline-date">2024年2月3日</div>
                 <img src="image/2024年2月3日-蓉笙-两只小土豆子.png" class="timeline-image">
                 <div class="timeline-desc">我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们的快乐感染了彼此，那时候，我们笑的合不拢嘴</div>
@@ -500,6 +691,14 @@
                 <img src="image\柳儿生日贺图-3.jpg" class="surprise-image">
             </div>
         </div>
+        <button class="nav-btn" id="dontClickBtn" onclick="handleDontClick()">不要点我</button>
+    </div>
+
+    <div id="new-surprise-page" class="surprise" style="display: none;">
+        <div class="cake-container">
+            <img src="image/公主生日蛋糕.png" class="cake-image">
+            <img src="image/新贺图-信格式-隐藏页面下的图.jpg" class="greeting-image">
+        </div>
     </div>
 
     <div class="modal" id="thoughts-modal">
@@ -518,8 +717,8 @@
     </div>
 
     <div class="lightbox" id="lightbox">
-        <span class="close-btn" onclick="hideLightbox()">&times;</span>
         <div class="lightbox-content">
+            <span class="close-btn" onclick="hideLightbox()">&times;</span>
             <div class="lightbox-image">
                 <img id="lightbox-img" src="">
             </div>
@@ -527,6 +726,27 @@
                 <h2 id="lightbox-date"></h2>
                 <p id="lightbox-desc"></p>
             </div>
+        </div>
+    </div>
+
+    <!-- 三道横线按钮 -->
+    <div class="menu-btn" onclick="toggleSidebar()">&#9776;</div>
+
+    <!-- 侧边菜单 -->
+    <div class="sidebar" id="sidebar">
+        <a href="#" onclick="showUpdateNotice()">更新公告</a>
+        <a href="#" onclick="showWaitingMessage()">等待更新……</a>
+    </div>
+
+    <!-- 覆盖层 -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- 更新公告模态框 -->
+    <div id="updateModal" class="update-modal">
+        <div class="update-modal-content">
+            <span class="update-modal-close" onclick="closeUpdateModal()">&times;</span>
+            <div class="update-modal-header">更新公告</div>
+            <div id="updateContent"></div>
         </div>
     </div>
 
@@ -585,6 +805,7 @@
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('timeline-page').style.display = 'none';
             document.getElementById('surprise-page').style.display = 'block';
+            document.getElementById('new-surprise-page').style.display = 'none';
         }
 
         function showLightbox(imgSrc, date, desc) {
@@ -605,6 +826,12 @@
 
             lightbox.style.display = 'block';
             setTimeout(() => lightbox.classList.add('show'), 10);
+
+            lightbox.addEventListener('wheel', function(event) {
+                event.preventDefault();
+                const delta = Math.sign(event.deltaY);
+                lightbox.scrollTop += delta * 30;
+            });
         }
 
         function hideLightbox() {
@@ -637,6 +864,142 @@
         setInterval(updateCurrentTime, 1000);
         setInterval(updateCountdown, 1000);
         showHome();
+
+        let clickCount = 0; // 新增变量
+
+        function handleDontClick() {
+            clickCount++;
+            const message = document.createElement('div');
+            message.className = 'floating-message';
+
+            switch (clickCount) {
+                case 1:
+                    message.textContent = '按钮：嗯？干嘛？';
+                    break;
+                case 2:
+                    message.textContent = '按钮：不要点啦';
+                    break;
+                case 3:
+                    message.textContent = '按钮：你点多少次都没用的啦！';
+                    break;
+                case 4:
+                    message.textContent = '按钮：嗯，好吧，你赢了，偷偷告诉你，还有个惊喜给你哦';
+                    document.getElementById('dontClickBtn').style.display = 'none';
+                    document.getElementById('surpriseTwoBtn').style.display = 'inline-block';
+                    break;
+                default:
+                    return;
+            }
+
+            // 获取当前所有的消息元素
+            const existingMessages = document.querySelectorAll('.floating-message');
+            const offset = 10; // 每个消息之间的间距
+
+            // 调整每个消息的位置
+            existingMessages.forEach((msg, index) => {
+                msg.style.bottom = `${20 + (index + 1) * (msg.offsetHeight + offset)}px`;
+            });
+
+            document.body.appendChild(message);
+            message.style.display = 'block';
+            message.style.bottom = '20px'; // 初始位置
+
+            setTimeout(() => {
+                message.style.display = 'none';
+                document.body.removeChild(message);
+            }, 3000);
+
+            // 新增代码：随机移动按钮
+            const button = document.getElementById('dontClickBtn');
+            const maxWidth = window.innerWidth - button.offsetWidth;
+            const maxHeight = window.innerHeight - button.offsetHeight;
+            const randomX = Math.random() * maxWidth;
+            const randomY = Math.random() * maxHeight;
+
+            button.style.position = 'absolute';
+            button.style.left = `${randomX}px`;
+            button.style.top = `${randomY}px`;
+        }
+
+        function showNewSurprise() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('timeline-page').style.display = 'none';
+            document.getElementById('surprise-page').style.display = 'none';
+            document.getElementById('new-surprise-page').style.display = 'block';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+                overlay.style.display = 'none';
+            } else {
+                sidebar.style.left = '0px';
+                overlay.style.display = 'block';
+            }
+        }
+
+        function showUpdateNotice() {
+            const updateContent = `
+一、优化
+    1. 修改放大后视图的关闭按钮颜色为黑色
+    2. 修改放大后视图的关闭按钮位置为相对于底板，而不是相对于整个页面
+二、新增
+    1. 新增侧边菜单的更新公告
+    2. 新增小惊喜中的彩蛋按钮
+    3. 新增隐藏的惊喜
+    4. 新增右下角提醒消息
+三、修复
+    1. 修复了在放大后视图下使用鼠标滚轮时，网页页面会滚动的问题
+            `;
+
+            document.getElementById('updateContent').innerText = updateContent;
+            document.getElementById('updateModal').style.display = 'block';
+
+            // 禁用页面滚动
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${window.scrollY}px`;
+            document.body.style.width = '100%';
+        }
+
+        function closeUpdateModal() {
+            const scrollY = document.body.style.top;
+            document.getElementById('updateModal').style.display = 'none';
+
+            // 恢复页面滚动
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
+
+        function showWaitingMessage() {
+            const message = document.createElement('div');
+            message.className = 'floating-message';
+            message.textContent = '等待更新中，敬请期待';
+            document.body.appendChild(message);
+            message.style.display = 'block';
+
+            // 获取当前所有的消息元素
+            const existingMessages = document.querySelectorAll('.floating-message');
+            const offset = 10; // 每个消息之间的间距
+
+            // 调整每个消息的位置
+            existingMessages.forEach((msg, index) => {
+                msg.style.bottom = `${20 + index * (msg.offsetHeight + offset)}px`;
+            });
+
+            setTimeout(() => {
+                document.body.removeChild(message);
+                // 消息消失后调整剩余消息的位置
+                const remainingMessages = document.querySelectorAll('.floating-message');
+                remainingMessages.forEach((msg, index) => {
+                    msg.style.bottom = `${20 + index * (msg.offsetHeight + offset)}px`;
+                });
+            }, 3000);
+        }
     </script>
 </body>
 </html>
