@@ -578,7 +578,7 @@
 
     <div id="timeline-page" class="timeline">
         <div class="timeline-grid">
-            <div class="timeline-item" onclick="showLightbox('image/初遇.jpg', '2023年8月24日', '这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈��挚友')">
+            <div class="timeline-item" onclick="showLightbox('image/初遇.jpg', '2023年8月24日', '这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈的挚友')">
                 <div class="timeline-date">2023年8月24日</div>
                 <img src="image/初遇.jpg" class="timeline-image" style="height: 200px; object-fit: cover; object-position: top; mask-image: linear-gradient(to bottom, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
                 <div class="timeline-desc">这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈的挚友</div>
@@ -877,10 +877,10 @@
                     message.textContent = '按钮：嗯？干嘛？';
                     break;
                 case 2:
-                    message.textContent = '按钮：不要点啦';
+                    message.textContent = '按钮：不要点啦！没用的';
                     break;
                 case 3:
-                    message.textContent = '按钮：你点多少次都没用的啦！';
+                    message.textContent = '按钮：你点多少次都没用的啦！不要再点了！';
                     break;
                 case 4:
                     message.textContent = '按钮：嗯，好吧，你赢了，偷偷告诉你，还有个惊喜给你哦';
@@ -952,6 +952,7 @@
     4. 新增右下角提醒消息
 三、修复
     1. 修复了在放大后视图下使用鼠标滚轮时，网页页面会滚动的问题
+    2. 修复了部分区域文本存在乱码的bug
             `;
 
             document.getElementById('updateContent').innerText = updateContent;
