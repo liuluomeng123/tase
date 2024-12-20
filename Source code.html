@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>柳儿生辰</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -107,19 +108,32 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 1002;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal.show {
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 30px;
-            width: 90%;
+            position: relative;
+            margin: 5% auto;
+            width: 80%;
             max-width: 600px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            animation: modalFade 0.3s ease;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
         }
 
         @keyframes modalFade {
@@ -196,7 +210,7 @@
             background-color: rgba(0,0,0,0.9);
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: 1000;
+            z-index: 1004;
         }
 
         .lightbox.show {
@@ -261,18 +275,17 @@
 
         .surprise-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
             padding: 20px;
         }
 
+        /* 视频容器样式 */
         .video-container {
-            width: 100%;
-            padding-top: 56.25%;
             position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 宽高比 */
+            margin-bottom: 20px;
         }
 
         .video-container video {
@@ -281,7 +294,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* 确保视频保持原始宽高比 */
         }
 
         .surprise-item {
@@ -513,44 +526,543 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0);
             z-index: 1002;
-            overflow: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-modal.show {
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .update-modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
+            position: relative;
+            margin: 5% auto;
             width: 80%;
-            max-width: 600px;
+            max-width: 800px;
+            height: 80vh;
+            background-color: white;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-height: 70vh;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .update-modal.show .update-modal-content {
+            transform: scale(1);
+            opacity: 1;
         }
 
         .update-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .update-modal-title {
             font-size: 24px;
             font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
+            color: #333;
         }
 
         .update-modal-close {
             color: #aaa;
-            float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            line-height: 1;
         }
 
-        .update-modal-close:hover,
-        .update-modal-close:focus {
+        .update-modal-close:hover {
             color: black;
-            text-decoration: none;
+        }
+
+        .update-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* 更新卡片样式 */
+        .update-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* 滚动条样式 */
+        .update-modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .update-modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .update-modal-body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .update-modal-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* 在现有样式后添加分页相关样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover {
+            background: #45a049;
+        }
+
+        .surprise-content {
+            min-height: 400px;
+        }
+
+        /* 添加音乐播放器样式 */
+        .music-player {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            width: 80%;
+            max-width: 400px;
+            margin: 20px auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .song-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .play-btn {
+            background: #4CAF50;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background: #45a049;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: #ddd;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 3px;
+            width: 0%;
+        }
+
+        .time {
+            font-size: 12px;
+            color: #666;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        /* 更新公告模态框内容 */
+        .update-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .version-number {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .content-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .content-section {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .section-item {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        .update-date {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-family: "黑体";
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 在侧边菜单中添加进度按钮 */
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar-btn:hover {
+            background: #555;
+        }
+
+        /* 进度窗口 */
+        .progress-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1003;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress-modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 80%;
+            max-width: 500px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        #progress-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 1002;
+            transition: background-color 0.3s ease;
+        }
+
+        #progress-modal.show {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #progress-modal.show .progress-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: black;
+        }
+
+        .progress-header {
+            margin-bottom: 20px;
+        }
+
+        .achievement-stats {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-achievements {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .achievement-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        /* 进度窗口样式 */
+        .progress-modal-content {
+            max-width: 500px;
+        }
+
+        .progress-header {
+            margin-bottom: 20px;
+        }
+
+        .achievement-stats {
+            font-size: 18px;
+            margin: 15px 0;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-achievements {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .achievements-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .achievement-item {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .achievement-item i {
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+
+        /* 成就解锁提示样式 */
+        .achievement-unlock-message {
+            background-color: #4CAF50;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* 侧边栏按钮样式 */
+        .sidebar-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            text-align: left;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .sidebar-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 进度窗口样式 */
+        #progress-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 1002;
+            transition: background-color 0.3s ease;
+        }
+
+        .progress-modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 80%;
+            max-width: 500px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        #progress-modal.show {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #progress-modal.show .progress-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .progress-header {
+            margin-bottom: 20px;
+        }
+
+        .achievement-stats {
+            font-size: 18px;
+            margin: 15px 0;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-achievements {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .achievements-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .achievement-item {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .achievement-item i {
+            color: #4CAF50;
+        }
+
+        /* 视频面板样式 */
+        .video-panel {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .video-title {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 宽高比 */
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .surprise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
         }
     </style>
 </head>
@@ -561,7 +1073,6 @@
         <button class="nav-btn" onclick="showHome()">首页</button>
         <button class="nav-btn" onclick="showTimeline()">时间线显示</button>
         <button class="nav-btn" onclick="showSurprise()">小惊喜</button>
-        <button class="nav-btn" id="surpriseTwoBtn" style="display: none;" onclick="showNewSurprise()">被隐藏的小惊喜OvO</button>
     </div>
 
     <div id="home-page">
@@ -653,45 +1164,103 @@
                 <img src="image/2024年11月29日-柳儿-树顶拍照-1305x682.png" class="timeline-image">
                 <div class="timeline-desc">我们一起在心链空间拍下了这张照，我多希望我的心能和你的心连在一起，替你承担所有的痛苦与磨难，让你能健康快乐的长大</div>
             </div>
+            <div class="timeline-item" onclick="showLightbox('image/2024年12月15日-柳儿-像我带着女儿.jpg', '2024年12月15日', '那天我们一起在可以变成怪物的地图中，我们最终击败BOSS，那个在雪原生存中最讨厌的家伙，而我也变成了它，你则是拿着它的脑袋，你在我的臂弯下，仿佛像是我带了女儿一样')">
+                <div class="timeline-date">2024年12月15日</div>
+                <img src="image/2024年12月15日-柳儿-像我带着女儿.jpg" class="timeline-image">
+                <div class="timeline-desc">那天我们一起在可以变成怪物的地图中，我们最终击败BOSS，那个在雪原生存中最讨厌的家伙，而我也变成了它，你则是拿着它的脑袋，你在我的臂弯下，仿佛像是我带了女儿一样</div>
+            </div>
         </div>
     </div>
 
     <div id="surprise-page" class="surprise">
-        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">播放音乐</button>
-        <audio id="bgMusic" src="song\韩甜甜_小石头和孩子们-我的梦(Live).mp3"></audio>
-        <div class="surprise-grid">
-            <div class="video-container">
-                <video width="100%" height="100%" controls>
-                    <source src="videos\2024年2月23日-柳儿-表白成功.mp4" type="video/mp4">
-                    您的浏览器不支持 video 标签。
-                </video>
+        <!-- 分页内容容器 -->
+        <div id="surprise-content-1" class="surprise-content">
+            <!-- 第1页：音乐按钮 -->
+            <div class="music-player">
+                <div class="song-info">我的梦 - 韩甜甜、小石头和孩子们</div>
+                <div class="controls">
+                    <button class="play-btn" id="playBtn" onclick="toggleMusic()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <span class="time" id="currentTime">00:00</span>
+                    <span class="time">/</span>
+                    <span class="time" id="duration">00:00</span>
+                </div>
             </div>
-            <div class="video-container">
-                <video width="100%" height="100%" controls>
-                    <source src="videos\2024年3月29日-柳儿-双人比心.mp4" type="video/mp4">
-                    您的浏览器不支持 video 标签。
-                </video>
-            </div>
-            <div class="video-container">
-                <video width="100%" height="100%" controls>
-                    <source src="videos\2024年7月27日-柳儿-天使与堕天使.mp4" type="video/mp4">
-                    您的浏览器不支持 video 标签。
-                </video>
-            </div>
-            <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-1.jpg', '贺图1', '')">
-                <div class="surprise-title">贺图1</div>
-                <img src="image\柳儿生日贺图-1.jpg" class="surprise-image">
-            </div>
-            <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-2.jpg', '贺图2', '')">
-                <div class="surprise-title">贺图2</div>
-                <img src="image\柳儿生日贺图-2.jpg" class="surprise-image">
-            </div>
-            <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-3.jpg', '贺图3', '')">
-                <div class="surprise-title">贺图3</div>
-                <img src="image\柳儿生日贺图-3.jpg" class="surprise-image">
+            <audio id="bgMusic" src="song\韩甜甜_小石头和孩子们-我的梦(Live).mp3"></audio>
+        </div>
+
+        <div id="surprise-content-2" class="surprise-content" style="display: none;">
+            <!-- 第2页：视频内容 -->
+            <div class="surprise-grid">
+                <div class="video-panel">
+                    <div class="video-title">测试-videos-测试1.mp4</div>
+                    <div class="video-container">
+                        <video width="100%" height="100%" controls preload="metadata">
+                            <source src="videos/测试-videos-测试1.mp4" type="video/mp4">
+                            您的浏览器不支持 video 标签。
+                        </video>
+                    </div>
+                </div>
+                <div class="video-panel">
+                    <div class="video-title">测试-videos-测试2.mp4</div>
+                    <div class="video-container">
+                        <video width="100%" height="100%" controls>
+                            <source src="videos/测试-videos-测试2.mp4" type="video/mp4">
+                            您的浏览器不支持 video 标签。
+                        </video>
+                    </div>
+                </div>
+                <div class="video-panel">
+                    <div class="video-title">测试-videos-测试3.mp4</div>
+                    <div class="video-container">
+                        <video width="100%" height="100%" controls>
+                            <source src="videos/测试-videos-测试3.mp4" type="video/mp4">
+                            您的浏览器不支持 video 标签。
+                        </video>
+                    </div>
+                </div>
             </div>
         </div>
-        <button class="nav-btn" id="dontClickBtn" onclick="handleDontClick()">不要点我</button>
+
+        <div id="surprise-content-3" class="surprise-content" style="display: none;">
+            <!-- 第3页：贺图内容 -->
+            <div class="surprise-grid">
+                <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-1.jpg', '贺图1', '')">
+                    <div class="surprise-title">贺图1</div>
+                    <img src="image\柳儿生日贺图-1.jpg" class="surprise-image">
+                </div>
+                <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-2.jpg', '贺图2', '')">
+                    <div class="surprise-title">贺图2</div>
+                    <img src="image\柳儿生日贺图-2.jpg" class="surprise-image">
+                </div>
+                <div class="surprise-item" onclick="showLightbox('image/柳儿生日贺图-3.jpg', '贺图3', '')">
+                    <div class="surprise-title">贺图3</div>
+                    <img src="image\柳儿生日贺图-3.jpg" class="surprise-image">
+                </div>
+            </div>
+        </div>
+
+        <div id="surprise-content-4" class="surprise-content" style="display: none;">
+            <!-- 第4页：隐藏内容 -->
+            <div class="cake-container">
+                <img src="image/公主生日蛋糕.png" class="cake-image">
+                <img src="image/新贺图-信格式-隐藏页面下的图.jpg" class="greeting-image">
+            </div>
+        </div>
+
+        <!-- 分页按钮 -->
+        <div class="pagination">
+            <button onclick="changePage('prev')" class="page-btn">上一页</button>
+            <button onclick="goToPage(1)" class="page-btn">1</button>
+            <button onclick="goToPage(2)" class="page-btn">2</button>
+            <button onclick="goToPage(3)" class="page-btn">3</button>
+            <button onclick="goToPage(4)" class="page-btn" id="page4Btn" style="display: none;">4</button>
+            <button onclick="changePage('next')" class="page-btn">下一页</button>
+        </div>
     </div>
 
     <div id="new-surprise-page" class="surprise" style="display: none;">
@@ -735,6 +1304,9 @@
     <!-- 侧边菜单 -->
     <div class="sidebar" id="sidebar">
         <a href="#" onclick="showUpdateNotice()">更新公告</a>
+        <button onclick="showProgress()" class="sidebar-btn">
+            <i class="fas fa-trophy"></i> 进度
+        </button>
         <a href="#" onclick="showWaitingMessage()">等待更新……</a>
     </div>
 
@@ -744,9 +1316,83 @@
     <!-- 更新公告模态框 -->
     <div id="updateModal" class="update-modal">
         <div class="update-modal-content">
-            <span class="update-modal-close" onclick="closeUpdateModal()">&times;</span>
-            <div class="update-modal-header">更新公告</div>
-            <div id="updateContent"></div>
+            <div class="update-modal-header">
+                <div class="update-modal-title">更新公告</div>
+                <span class="update-modal-close" onclick="closeUpdateModal()">&times;</span>
+            </div>
+            <div class="update-modal-body">
+                <!-- beta0.4 更新内容 -->
+                <div class="update-card">
+                    <div class="version-number">beta0.4</div>
+                    <div class="update-content">
+                        <div class="content-title">更新内容</div>
+                        <div class="content-section">
+                            <div class="section-title">一、优化</div>
+                            <div class="section-item">1. 修改放大后视图的关闭按钮颜色为黑色</div>
+                            <div class="section-item">2. 修改放大后视图的关闭按钮位置为相对于底板，而不是相对于整个页面</div>
+                        </div>
+                        <div class="content-section">
+                            <div class="section-title">二、新增</div>
+                            <div class="section-item">1. 新增侧边菜单的更新公告</div>
+                            <div class="section-item">2. 新增小惊喜中的彩蛋按钮</div>
+                            <div class="section-item">3. 新增隐藏的惊喜</div>
+                            <div class="section-item">4. 新增右下角提醒消息</div>
+                        </div>
+                        <div class="content-section">
+                            <div class="section-title">三、修复</div>
+                            <div class="section-item">1. 修复了在放大后视图下使用鼠标滚轮时，网页页面会滚动的问题</div>
+                            <div class="section-item">2. 修复了部分区域文本存在乱码的bug</div>
+                        </div>
+                    </div>
+                    <div class="update-date">2024年12月15日</div>
+                </div>
+
+                <!-- beta0.5 更新内容 -->
+                <div class="update-card">
+                    <div class="version-number">beta0.5</div>
+                    <div class="update-content">
+                        <div class="content-title">更新内容</div>
+                        <div class="content-section">
+                            <div class="section-title">一、优化</div>
+                            <div class="section-item">1. 优化了侧边菜单开始按钮的层级问题，使得其不会遮挡其他内容</div>
+                            <div class="section-item">2. 优化了小惊喜页面的排版，使其更加美观</div>
+                            <div class="section-item">3. 优化了小惊喜页面的音乐窗口（当前使用的是测试音乐）</div>
+                            <div class="section-item">4. 优化了小惊喜页面的视频窗口，并添加了测试视频</div>
+                            <div class="section-item">5. 优化了更新公告的展示</div>
+                            <div class="section-item">6. 优化了更新公告、建站初心的动画，使得其不那么僵硬</div>
+                        </div>
+                        <div class="content-section">
+                            <div class="section-title">二、新增</div>
+                            <div class="section-item">1. 新增了些许彩蛋</div>
+                            <div class="section-item">2. 新增了成就系统</div>
+                        </div>
+                        <div class="content-section">
+                            <div class="section-title">三、移除</div>
+                            <div class="section-item">1. 移除了beta0.4版本中新增的"隐藏的惊喜、小惊喜中的菜单按钮"</div>
+                        </div>
+                    </div>
+                    <div class="update-date">2024年12月20日</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 进度窗口 -->
+    <div id="progress-modal" class="modal">
+        <div class="modal-content progress-modal-content">
+            <span class="close-btn" onclick="closeProgressModal()">&times;</span>
+            <div class="progress-header">
+                <h2>解锁进度</h2>
+                <div class="achievement-stats">
+                    已解锁：<span id="unlocked-count">0</span> / <span id="total-count">0</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-achievements" id="achievements-progress"></div>
+                </div>
+            </div>
+            <div class="achievements-container" id="achievements-list">
+                <!-- 成就列表将通过 JavaScript 动态添加 -->
+            </div>
         </div>
     </div>
 
@@ -786,7 +1432,14 @@
         }
 
         function showInitialThoughts() {
-            document.getElementById('thoughts-modal').style.display = 'block';
+            const modal = document.getElementById('thoughts-modal');
+            if (modal) {
+                modal.style.display = 'block';
+                handleThoughtsModalScroll();
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
+            }
         }
 
         function showHome() {
@@ -841,92 +1494,209 @@
         }
 
         window.onclick = function(event) {
-            const modal = document.getElementById('thoughts-modal');
-            if (event.target == modal) {
-                modal.style.display = "none";
+            const updateModal = document.getElementById('updateModal');
+            const thoughtsModal = document.getElementById('thoughts-modal');
+            const progressModal = document.getElementById('progress-modal');
+            
+            if (event.target == updateModal) {
+                closeUpdateModal();
+            }
+            if (event.target == thoughtsModal) {
+                closeThoughtsModal();
+            }
+            if (event.target == progressModal) {
+                closeProgressModal();
             }
         }
 
         function toggleMusic() {
             const music = document.getElementById('bgMusic');
-            const musicBtn = document.getElementById('musicBtn');
+            const playBtn = document.getElementById('playBtn');
+            const icon = playBtn.querySelector('i');
             
             if (music.paused) {
                 music.play();
-                musicBtn.textContent = '暂停播放';
+                icon.className = 'fas fa-pause';
             } else {
                 music.pause();
-                musicBtn.textContent = '继续播放';
+                icon.className = 'fas fa-play';
             }
         }
+
+        // 添加音乐进度更新功能
+        document.getElementById('bgMusic').addEventListener('timeupdate', function() {
+            const progress = document.getElementById('progress');
+            const currentTime = document.getElementById('currentTime');
+            const duration = document.getElementById('duration');
+            
+            // 更新进度条
+            const percent = (this.currentTime / this.duration) * 100;
+            progress.style.width = percent + '%';
+            
+            // 更新时间显示
+            currentTime.textContent = formatTime(this.currentTime);
+            duration.textContent = formatTime(this.duration);
+        });
+
+        // 格式化时间显示
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 添加进度条点击功能
+        document.querySelector('.progress-bar').addEventListener('click', function(e) {
+            const music = document.getElementById('bgMusic');
+            const percent = e.offsetX / this.offsetWidth;
+            music.currentTime = percent * music.duration;
+        });
 
         // 初始化
         setInterval(updateCurrentTime, 1000);
         setInterval(updateCountdown, 1000);
         showHome();
 
-        let clickCount = 0; // 新增变量
+        let currentPage = 1;
+        let nextClickCount = 0;
+        let lastPageClickCount = 0;
 
-        function handleDontClick() {
-            clickCount++;
-            const message = document.createElement('div');
-            message.className = 'floating-message';
+        function showFloatingMessage(message) {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'floating-message';
+            messageEl.textContent = message;
+            document.body.appendChild(messageEl);
+            messageEl.style.display = 'block';
 
-            switch (clickCount) {
-                case 1:
-                    message.textContent = '按钮：嗯？干嘛？';
-                    break;
-                case 2:
-                    message.textContent = '按钮：不要点啦！没用的';
-                    break;
-                case 3:
-                    message.textContent = '按钮：你点多少次都没用的啦！不要再点了！';
-                    break;
-                case 4:
-                    message.textContent = '按钮：嗯，好吧，你赢了，偷偷告诉你，还有个惊喜给你哦';
-                    document.getElementById('dontClickBtn').style.display = 'none';
-                    document.getElementById('surpriseTwoBtn').style.display = 'inline-block';
-                    break;
-                default:
-                    return;
-            }
+            // 获取所有现有消息（不包括新创建的消息）
+            const existingMessages = Array.from(document.querySelectorAll('.floating-message')).slice(0, -1);
+            
+            // 计算每条消息的高度
+            const messageHeight = messageEl.offsetHeight;
 
-            // 获取当前所有的消息元素
-            const existingMessages = document.querySelectorAll('.floating-message');
-            const offset = 10; // 每个消息之间的间距
+            // 新消息放在底部
+            messageEl.style.bottom = '20px';
 
-            // 调整每个消息的位置
-            existingMessages.forEach((msg, index) => {
-                msg.style.bottom = `${20 + (index + 1) * (msg.offsetHeight + offset)}px`;
+            // 从下往上依次堆叠现有消息
+            existingMessages.reverse().forEach((msg, index) => {
+                msg.style.bottom = `${20 + (index + 1) * messageHeight}px`;
             });
 
-            document.body.appendChild(message);
-            message.style.display = 'block';
-            message.style.bottom = '20px'; // 初始位置
-
+            // 3秒后移除消息
             setTimeout(() => {
-                message.style.display = 'none';
-                document.body.removeChild(message);
+                messageEl.remove();
+                // 重新调整剩余消息的位置
+                const remainingMessages = Array.from(document.querySelectorAll('.floating-message')).reverse();
+                remainingMessages.forEach((msg, index) => {
+                    msg.style.bottom = `${20 + index * messageHeight}px`;
+                });
             }, 3000);
-
-            // 新增代码：随机移动按钮
-            const button = document.getElementById('dontClickBtn');
-            const maxWidth = window.innerWidth - button.offsetWidth;
-            const maxHeight = window.innerHeight - button.offsetHeight;
-            const randomX = Math.random() * maxWidth;
-            const randomY = Math.random() * maxHeight;
-
-            button.style.position = 'absolute';
-            button.style.left = `${randomX}px`;
-            button.style.top = `${randomY}px`;
         }
 
-        function showNewSurprise() {
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('timeline-page').style.display = 'none';
-            document.getElementById('surprise-page').style.display = 'none';
-            document.getElementById('new-surprise-page').style.display = 'block';
+        function changePage(direction) {
+            if (direction === 'prev') {
+                if (currentPage === 1) {
+                    showFloatingMessage('已经是第一页啦');
+                    return;
+                }
+                currentPage--;
+            } else {
+                if (currentPage === 3) {
+                    if (document.getElementById('page4Btn').style.display === 'none') {
+                        nextClickCount++;
+                        handlePage3NextClick();
+                        return;
+                    }
+                }
+                if (currentPage === 4) {
+                    lastPageClickCount++;
+                    handleLastPageClick();
+                    return;
+                }
+                const maxPage = document.getElementById('page4Btn').style.display === 'none' ? 3 : 4;
+                if (currentPage < maxPage) {
+                    currentPage++;
+                }
+            }
+            updatePageDisplay();
         }
+
+        function goToPage(page) {
+            currentPage = page;
+            updatePageDisplay();
+            
+            // 当切换到第四页时解锁成就
+            if (page === 4) {
+                unlockAchievement('hiddenPage');
+            }
+        }
+
+        function updatePageDisplay() {
+            // 隐藏所有内容
+            document.querySelectorAll('.surprise-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            // 显示当前页内容
+            document.getElementById(`surprise-content-${currentPage}`).style.display = 'block';
+            
+            // 当显示第四页时解锁成就
+            if (currentPage === 4) {
+                unlockAchievement('hiddenPage');
+            }
+        }
+
+        function handlePage3NextClick() {
+            const messages = [
+                "已经是最后一页啦ヾ(❀^ω^)ﾉﾞ",
+                "尊嘟是最后一页啦(✪ω✪)",
+                "后面真的没有啦(灬°ω°灬) ",
+                "不要再按啦￣へ￣",
+                "真的是最后一页了，你怎么能不相信我o(╥﹏╥)o",
+                "唔，你难道知道了些什么Σ(っ°Д°;)っ",
+                "不会吧，不可能不可能，你怎么会知道的(;≧Д≦)y",
+                "你……你一定要逼我吗，还是你……真的知道了 o(TωT)o ",
+                "那好吧…看样子你真的知道了，那那那我就摊牌了┐(・o・)┌ 其实还有第四页，那就给你看看吧，虽然没什么好看的╮(・o・)╭"
+            ];
+
+            if (nextClickCount <= messages.length) {
+                showFloatingMessage(messages[nextClickCount - 1]);
+            }
+
+            if (nextClickCount === 9) {
+                const page4Btn = document.getElementById('page4Btn');
+                page4Btn.style.display = 'inline-block';
+                unlockAchievement('hiddenPage'); // 在这里添加成就解锁
+            }
+        }
+
+        function handleLastPageClick() {
+            if (lastPageClickCount <= 25) {
+                showFloatingMessage("已经是最后一页啦");
+            } else if (lastPageClickCount === 26) {
+                showFloatingMessage("我是有底线的");
+                unlockAchievement('bottomLine');
+            } else if (lastPageClickCount === 52) {
+                showFloatingMessage("好吧，开发者让我转交给你一个东西，mua~");
+                unlockAchievement('developerGift');
+            } else if (lastPageClickCount >= 53 && lastPageClickCount <= 103) {
+                const messages = [
+                    "mua! (*╯3╰)",
+                    "ღ( ´･ᴗ･` )比心",
+                    "♥(๑> ₃ <)♥"
+                ];
+                showFloatingMessage(messages[Math.floor(Math.random() * messages.length)]);
+            } else if (lastPageClickCount === 104) {
+                showFloatingMessage("唔哇，你不累吗？");
+            } else if (lastPageClickCount === 105) {
+                showFloatingMessage("唔，好吧，我累了，你自己玩吧");
+                unlockAchievement('tiredSystem');
+            } else {
+                showFloatingMessage("已经是最后一页啦");
+            }
+        }
+
+        // 初始化显示第一页
+        updatePageDisplay();
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -941,63 +1711,207 @@
         }
 
         function showUpdateNotice() {
-            const updateContent = `
-一、优化
-    1. 修改放大后视图的关闭按钮颜色为黑色
-    2. 修改放大后视图的关闭按钮位置为相对于底板，而不是相对于整个页面
-二、新增
-    1. 新增侧边菜单的更新公告
-    2. 新增小惊喜中的彩蛋按钮
-    3. 新增隐藏的惊喜
-    4. 新增右下角提醒消息
-三、修复
-    1. 修复了在放大后视图下使用鼠标滚轮时，网页页面会滚动的问题
-    2. 修复了部分区域文本存在乱码的bug
-            `;
+            const modal = document.getElementById('updateModal');
+            if (modal) {
+                modal.style.display = 'block';
+                handleUpdateModalScroll();
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
+            }
+        }
 
-            document.getElementById('updateContent').innerText = updateContent;
-            document.getElementById('updateModal').style.display = 'block';
-
-            // 禁用页面滚动
-            document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${window.scrollY}px`;
-            document.body.style.width = '100%';
+        function handleUpdateModalScroll() {
+            const modalBody = document.querySelector('.update-modal-body');
+            
+            modalBody.addEventListener('wheel', function(event) {
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const height = this.clientHeight;
+                
+                // 当滚动到顶部或底部时阻止事件传递
+                if (
+                    (scrollTop === 0 && event.deltaY < 0) || // 到达顶部且继续向上滚动
+                    (scrollTop + height >= scrollHeight && event.deltaY > 0) // 到达底部且继续向下滚动
+                ) {
+                    event.preventDefault();
+                }
+            });
         }
 
         function closeUpdateModal() {
-            const scrollY = document.body.style.top;
-            document.getElementById('updateModal').style.display = 'none';
-
-            // 恢复页面滚动
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.top = '';
-            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            const modal = document.getElementById('updateModal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
         }
 
         function showWaitingMessage() {
-            const message = document.createElement('div');
-            message.className = 'floating-message';
-            message.textContent = '等待更新中，敬请期待';
-            document.body.appendChild(message);
-            message.style.display = 'block';
+            showFloatingMessage('等待更新中，敬请期待');
+        }
 
-            // 获取当前所有的消息元素
-            const existingMessages = document.querySelectorAll('.floating-message');
-            const offset = 10; // 每个消息之间的间距
+        function closeThoughtsModal() {
+            const modal = document.getElementById('thoughts-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        }
 
-            // 调整每个消息的位置
-            existingMessages.forEach((msg, index) => {
-                msg.style.bottom = `${20 + index * (msg.offsetHeight + offset)}px`;
+        function handleThoughtsModalScroll() {
+            const modalContent = document.querySelector('.modal-content > div');
+            
+            modalContent.addEventListener('wheel', function(event) {
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const height = this.clientHeight;
+                
+                // 当滚动到顶部或底部时阻止事件传递
+                if (
+                    (scrollTop === 0 && event.deltaY < 0) || // 到达顶部且继续向上滚动
+                    (scrollTop + height >= scrollHeight && event.deltaY > 0) // 到达底部且继续向下滚动
+                ) {
+                    event.preventDefault();
+                }
+            });
+        }
+
+        // 成就系统
+        const achievements = {
+            hiddenPage: {
+                id: 'hiddenPage',
+                name: '隐藏的页面',
+                description: '发现隐藏的第四页',
+                unlocked: false
+            },
+            bottomLine: {
+                id: 'bottomLine',
+                name: '有底线的系统',
+                description: '在第四页点击了26次下一页',
+                unlocked: false
+            },
+            developerGift: {
+                id: 'developerGift',
+                name: '开发者的馈赠',
+                description: '在第四页点击了52次下一页',
+                unlocked: false
+            },
+            tiredSystem: {
+                id: 'tiredSystem',
+                name: '疲劳的系统',
+                description: '在第四页点击了105次下一页',
+                unlocked: false
+            }
+        };
+
+        // 显示进度窗口
+        function showProgress() {
+            const modal = document.getElementById('progress-modal');
+            if (modal) {
+                modal.style.display = 'block';
+                updateProgressDisplay();
+                setTimeout(() => {
+                    modal.classList.add('show');
+                }, 10);
+            }
+        }
+
+        // 关闭进度窗口
+        function closeProgressModal() {
+            const modal = document.getElementById('progress-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // 更新进度显示
+        function updateProgressDisplay() {
+            const unlockedCount = Object.values(achievements).filter(a => a.unlocked).length;
+            const totalCount = Object.keys(achievements).length;
+            
+            document.getElementById('unlocked-count').textContent = unlockedCount;
+            document.getElementById('total-count').textContent = totalCount;
+            
+            const progressBar = document.getElementById('achievements-progress');
+            if (progressBar) {
+                progressBar.style.width = `${(unlockedCount / totalCount) * 100}%`;
+            }
+            
+            updateAchievementsList();
+        }
+
+        // 更新成就列表
+        function updateAchievementsList() {
+            const container = document.getElementById('achievements-list');
+            if (container) {
+                container.innerHTML = '';
+                
+                Object.values(achievements).forEach(achievement => {
+                    if (achievement.unlocked) {
+                        const item = document.createElement('div');
+                        item.className = 'achievement-item';
+                        item.innerHTML = `
+                            <i class="fas fa-trophy"></i>
+                            <div>
+                                <div><strong>${achievement.name}</strong></div>
+                                <div>${achievement.description}</div>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    }
+                });
+            }
+        }
+
+        // 解锁成就
+        function unlockAchievement(achievementId) {
+            const achievement = achievements[achievementId];
+            if (achievement && !achievement.unlocked) {
+                achievement.unlocked = true;
+                showFloatingMessage(`已解锁成就：${achievement.name}`, 'achievement');
+                updateProgressDisplay();
+            }
+        }
+
+        // 修改现有的 showFloatingMessage 函数
+        function showFloatingMessage(message, type = 'normal') {
+            const messageEl = document.createElement('div');
+            messageEl.className = type === 'achievement' ? 
+                'floating-message achievement-unlock-message' : 
+                'floating-message';
+            messageEl.textContent = message;
+            document.body.appendChild(messageEl);
+            messageEl.style.display = 'block';
+
+            // 获取所有现有消息（不包括新创建的消息）
+            const existingMessages = Array.from(document.querySelectorAll('.floating-message')).slice(0, -1);
+            
+            // 计算每条消息的高度
+            const messageHeight = messageEl.offsetHeight;
+
+            // 新消息放在底部
+            messageEl.style.bottom = '20px';
+
+            // 从下往上依次堆叠现有消息
+            existingMessages.reverse().forEach((msg, index) => {
+                msg.style.bottom = `${20 + (index + 1) * messageHeight}px`;
             });
 
+            // 3秒后移除消息
             setTimeout(() => {
-                document.body.removeChild(message);
-                // 消息消失后调整剩余消息的位置
-                const remainingMessages = document.querySelectorAll('.floating-message');
+                messageEl.remove();
+                // 重新调整剩余消息的位置
+                const remainingMessages = Array.from(document.querySelectorAll('.floating-message')).reverse();
                 remainingMessages.forEach((msg, index) => {
-                    msg.style.bottom = `${20 + index * (msg.offsetHeight + offset)}px`;
+                    msg.style.bottom = `${20 + index * messageHeight}px`;
                 });
             }, 3000);
         }
