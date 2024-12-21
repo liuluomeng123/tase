@@ -149,7 +149,7 @@
             color: #2c3e50;
         }
 
-        /* 时间线样式 */
+        /* 里程碑样式 */
         .timeline {
             display: none;
             padding: 20px;
@@ -201,16 +201,18 @@
 
         /* 放大查看样式 */
         .lightbox {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; /* 放大查看图片置于最顶层 */
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: 1005;
         }
 
         .lightbox.show {
@@ -234,6 +236,7 @@
             padding: 20px;
             background: #f8f9fa;
             overflow: auto;
+            position: relative; /* 添加相对定位 */
         }
 
         .lightbox-image img {
@@ -387,7 +390,7 @@
             padding: 10px 20px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1003;
+            z-index: 9993; /* 浮动消息 */
             display: none;
             animation: fadeInOut 3s ease;
         }
@@ -481,7 +484,7 @@
             background-color: #333;
             color: white;
             transition: left 0.3s ease;
-            z-index: 1004;
+            z-index: 9991; /* 侧边栏 */
             padding-top: 60px;
         }
 
@@ -505,7 +508,7 @@
             left: 20px;
             font-size: 30px;
             cursor: pointer;
-            z-index: 1005;
+            z-index: 9992; /* 菜单按钮 */
             transition: opacity 0.3s ease;
         }
 
@@ -523,7 +526,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1003;
+            z-index: 9990; /* 遮罩层 */
         }
 
         /* 更新公告模态框样式 */
@@ -535,7 +538,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1004;
+            z-index: 9995; /* 更新公告 */
             transition: background-color 0.3s ease;
         }
 
@@ -775,7 +778,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1005;
+            z-index: 10001; /* 成就窗口提升到最高层级 */
             justify-content: center;
             align-items: center;
         }
@@ -802,7 +805,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1004;
+            z-index: 10001; /* 成就窗口提升到最高层级 */
             transition: background-color 0.3s ease;
         }
 
@@ -944,7 +947,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1004;
+            z-index: 10001; /* 成就窗口提升到最高层级 */
             transition: background-color 0.3s ease;
         }
 
@@ -1059,6 +1062,99 @@
             color: #333;
             margin-bottom: 20px;  /* 与正文保持距离 */
         }
+
+        .timeline-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+        }
+
+        .image-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .lightbox-navigation {
+            position: absolute; /* 改为绝对定位 */
+            bottom: 40px; /* 距离底部的距离 */
+            left: 50%;
+            transform: translateX(-50%); /* 水平居中 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.9); /* 添加半透明背景 */
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1001; /* 确保按钮在图片上层 */
+        }
+
+        .nav-button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-button:hover {
+            background: #45a049;
+        }
+
+        .nav-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .image-counter {
+            font-size: 14px;
+            color: #333;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* 添加图片切换动画相关样式 */
+        .lightbox-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #lightbox-img {
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .slide-left-enter {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .slide-left-exit {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        .slide-right-enter {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        .slide-right-exit {
+            opacity: 0;
+            transform: translateX(100%);
+        }
     </style>
 </head>
 <body>
@@ -1066,7 +1162,7 @@
 
     <div class="nav-buttons">
         <button class="nav-btn" onclick="showHome()">首页</button>
-        <button class="nav-btn" onclick="showTimeline()">时间线显示</button>
+        <button class="nav-btn" onclick="showTimeline()">里程碑</button>
         <button class="nav-btn" onclick="showSurprise()">小惊喜</button>
     </div>
 
@@ -1089,80 +1185,160 @@
                 <img src="image/初遇.jpg" class="timeline-image" style="height: 200px; object-fit: cover; object-position: top; mask-image: linear-gradient(to bottom, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
                 <div class="timeline-desc">这天我们初次相遇，初遇的那段时间，我们对彼此并非那么熟悉，但随着时间的推移，我们逐渐熟悉彼此，发现了彼此的优点，互相陪伴，互相鼓励，一起游戏，一起聊天，逐渐变成了无话不谈的挚友</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2023-12-02-我和蓉笙-100天纪念.png', '2023年12月02日', '这天是我们相识100天纪念日，同时也是你陪我度过的第一个生日，我很开心，也很幸福，可能就是那天，让我们对彼此有了更高的好感，为后来彼此的相爱打下了基础。我永远记得那天，我永远记得你，我永远爱你。')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2023-12-02-我和蓉笙-100天纪念.png',
+                'image/2023-12-02 我和蓉笙-100天纪念@1.png',
+                'image/2023-12-02 我和蓉笙-100天纪念@2.png'
+            ], '2023年12月02日', '这天是我们相识100天纪念日，同时也是你陪我度过的第一个生日，我很开心，也很幸福，可能就是那天，让我们对彼此有了更高的好感，为后来彼此的相爱打下了基础。我永远记得那天，我永远记得你，我永远爱你。')">
                 <div class="timeline-date">2023年12月02日</div>
-                <img src="image/2023-12-02-我和蓉笙-100天纪念.png" class="timeline-image">
+                <div class="timeline-image-container">
+                    <img src="image/2023-12-02-我和蓉笙-100天纪念.png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>3</span>
+                    </div>
+                </div>
                 <div class="timeline-desc">这天是我们相识100天纪念日，同时也是你陪我度过的第一个生日，我很开心，也很幸福，可能就是那天，让我们对彼此有了更高的好感，为后来彼此的相爱打下了基础。我永远记得那天，我永远记得你，我永远爱你。</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png', '2024年1月24日', '我们在跑酷途中，停在一个热气球前，一起欣赏着日落')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png',
+                'image/2024年1月24日-幻梦、蓉笙-路牌前@2.png',
+                'image/2024年1月24日-幻梦、蓉笙-路牌前的花海.png',
+                'image/2024年1月24日-蓉笙、幻梦-蓉笙好矮啊哈哈哈.png'
+            ], '2024年1月24日', '我们在跑酷途中，停在一个热气球前，一起欣赏着日落；在树屋前欣赏花海；在路牌前拍下了照片，记录下我们的美好瞬间；还乘着马车，走在繁华的街上，我多希望时间能慢一点，再慢一点')">
                 <div class="timeline-date">2024年1月24日</div>
-                <img src="image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png" class="timeline-image">
-                <div class="timeline-desc">我们在跑酷途中，停在一个热气球前，一起欣赏着日落，我多希望时间能停留在那一刻，永远不要流逝</div>
+                <div class="timeline-image-container">
+                    <img src="image/2024年1月24日-幻梦and蓉笙-热气球后的月亮.png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>4</span>
+                    </div>
+                </div>
+                <div class="timeline-desc">我们在跑酷途中，停在一个热气球前，一起欣赏着日落；在树屋前欣赏花海；在路牌前拍下了照片，记录下我们的美好瞬间；还乘着马车，走在繁华的街上，我多希望时间能慢一点，再慢一点</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年2月3日-蓉笙-两只小土豆子.png', '2024年2月3日', '我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们快乐感染了彼此，那时候，我们笑的合不拢嘴')">
-                <div class="timeline-date">2024年2月3日</div>
-                <img src="image/2024年2月3日-蓉笙-两只小土豆子.png" class="timeline-image">
-                <div class="timeline-desc">我们在我的地图中玩的不亦乐乎，突然我变成了你的模样，我们的快乐感染了彼此，那时候，我们笑的合不拢嘴</div>
-            </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年2月21日-蓉笙-一起看日落.jpg', '2024年2月21日', '我们一起在日落图中巡查，那时候的我还是风纪的一员，有时候我也会想，为了自己的利益，牺牲和朋友一起玩的时间，这真的值得吗……')">
-                <div class="timeline-date">2024年2月21日</div>
-                <img src="image/2024年2月21日-蓉笙-一起看日落.jpg" class="timeline-image">
-                <div class="timeline-desc">我们一起在日落图中巡查，那时候的我还是风纪的一员，有时候我也会想，为了自己的利益，牺牲和朋友一起玩的时间，这真的值得吗……</div>
-            </div>
-            <div class="timeline-item" onclick="showLightbox('image/临时爱情图片.jpg', '2024年2月23日', '我们正式相爱啦！我永远记得那天，我永远记得你的一切，记得你所有的美好，逐渐了解你的性格，你的喜好，你的习惯，你的所有……')">
-                <div class="timeline-date">2024年2月23日</div>
-                <img src="image/临时爱情图片.jpg" class="timeline-image">
-                <div class="timeline-desc">我们正式相爱啦！我永远记得那天，我永远记得你的一切，记得你所有的美好，逐渐了解你的性格，你的喜好，你的习惯，你的所有……</div>
-            </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年2月25日-柳儿-生存一起睡.png', '2024年2月25日', '我们在生存中一起睡觉，如此近的距离，我的心仿佛不再属于我，不再听从我的指挥')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年2月25日-柳儿-生存一起睡.png',
+                'image/2024年2月25日-柳儿-景色.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜-站-巨月.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜-站-巨月-1.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜-站-巨月-背面.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜-站-巨月-侧面.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜-站-巨月-特殊动作.png',
+                'image/2024年2月25日-柳儿-景色-漫漫长夜-坐.png',
+                'image/2024年2月25日-柳儿-景色-清爽早晨-坐.png',
+                'image/2024年2月25日-柳儿-景色-清新早晨-站-温室.png',
+                'image/2024年2月25日-柳儿-景色-清新早晨-站-温室-2.png',
+                'image/2024年2月25日-柳儿-景色-清新早晨-站-温室-对视.png',
+                'image/2024年2月25日-柳儿-景色-清新早晨-站-温室-特殊角度.png',
+                'image/2024年2月25日-柳儿-景色图-清爽早晨-坐.png'
+            ], '2024年2月25日', '我们在生存中一起睡觉，如此近的距离，我的心仿佛不再属于我，不再听从我的指挥；我们还一起拍了那么多美丽的照片，记录了许多美好瞬间，留下了许许多多美好的回忆')">
                 <div class="timeline-date">2024年2月25日</div>
-                <img src="image/2024年2月25日-柳儿-生存一起睡.png" class="timeline-image">
-                <div class="timeline-desc">我们在生存中一起睡觉，如此近的距离，我的心仿佛不再属于我，不再听从我的指挥</div>
+                <div class="timeline-image-container">
+                    <img src="image/2024年2月25日-柳儿-生存一起睡.png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>15</span>
+                    </div>
+                </div>
+                <div class="timeline-desc">我们在生存中一起睡觉，如此近的距离，我的心仿佛不再属于我，不再听从我的指挥<br>我们还一起拍了那么多美丽的照片，记录了许多美好瞬间，留下了许许多多美好的回忆</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年3月29日-柳梦生存生存-双人比心.png', '2024年3月29日', '我们配合的那么巧妙，心形气泡冒出的那瞬间，我的心仿佛离我而去，飞向遥远的远方，飞向有你的地方')">
-                <div class="timeline-date">2024年3月29日</div>
-                <img src="image/2024年3月29日-柳梦生存生存-双人比心.png" class="timeline-image">
-                <div class="timeline-desc">我们配合的那么巧妙，心形气泡冒出的那瞬间，我的心仿佛离我而去，飞向遥远的远方，飞向有你的地方</div>
-            </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年3月30日-柳儿-池塘倒映着硕大的玫瑰而我的眼中只有你.png', '2024年3月30日', '那天我们一起玩了一个跑酷的地图，地图里有那么多的美景，可在我眼中，它们都不及你一丝一毫，我的眼中只有你')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年3月30日-柳儿-池塘倒映着硕大的玫瑰而我的眼中只有你.png',
+                'image/2024年3月30日-柳儿-玫瑰花拱门前的你我.png',
+                'image/2024年3月30日-柳儿-硕大的玫瑰花前站着你和我.png',
+                'image/2024年3月30日-柳儿-站在月亮上眺望玫瑰拱门.png'
+            ], '2024年3月30日', '那天我们一起玩了一个跑酷的地图，地图里有那么多的美景，可在我眼中，它们都不及你一丝一毫，我的眼中只有你')">
                 <div class="timeline-date">2024年3月30日</div>
-                <img src="image/2024年3月30日-柳儿-池塘倒映着硕大的玫瑰而我的眼中只有你.png" class="timeline-image">
+                <div class="timeline-image-container">
+                    <img src="image/2024年3月30日-柳儿-池塘倒映着硕大的玫瑰而我的眼中只有你.png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>4</span>
+                    </div>
+                </div>
                 <div class="timeline-desc">那天我们一起玩了一个跑酷的地图，地图里有那么多的美景，可在我眼中，它们都不及你一丝一毫，我的眼中只有你</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年6月10日-柳儿-默契度5200.png', '2024年6月10日', '我们的默契度达到5200啦！我默默许愿，让我们能一直这样默契下去，直到永远')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年6月10日-柳儿-默契度5200.png'
+            ], '2024年6月10日', '我们的默契度达到5200啦！我默默许愿，让我们能一直这样默契下去，直到永远')">
                 <div class="timeline-date">2024年6月10日</div>
                 <img src="image/2024年6月10日-柳儿-默契度5200.png" class="timeline-image">
                 <div class="timeline-desc">我们的默契度达到5200啦！我默默许愿，让我们能一直这样默契下去，直到永远</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年7月16日-柳儿and呆萌的樱娃娃店门前-三只小马宝莉.png', '2024年7月16日', '那天我们一起拍摄了这张图片，仿佛我们真的成为了一家人，我多希望这一切能成真哇')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年7月16日-柳儿and呆萌的樱娃娃店门前-三只小马宝莉.png'
+            ], '2024年7月16日', '那天我们一起拍摄了这张图片，仿佛我们真的成为了一家人，我多希望这一切能成真哇')">
                 <div class="timeline-date">2024年7月16日</div>
-                <img src="image/2024年7月16日-柳儿and呆萌的樱娃娃店门前-三只小马宝莉.png" class="timeline-image">
+                <div class="timeline-image-container">
+                    <img src="image/2024年7月16日-柳儿and呆萌的樱娃娃店门前-三只小马宝莉.png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>1</span>
+                    </div>
+                </div>
                 <div class="timeline-desc">那天我们一起拍摄了这张图片，仿佛我们真的成为了一家人，我多希望这一切能成真哇</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年7月27日-柳儿-天使与堕天使-救赎感极强.png', '2024年7月27日', '我收到了你送的安琪儿，我们一起在那张跑酷图中拍下了这张照片，它仿佛有无尽的救赎感，深入了我的内心')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年7月27日-柳儿-天使与堕天使-救赎感极强.png'
+            ], '2024年7月27日', '我收到了你送的安琪儿，我们一起在那张跑酷图中拍下了这张照片，它仿佛有无尽的救赎感，深入了我的内心')">
                 <div class="timeline-date">2024年7月27日</div>
                 <img src="image/2024年7月27日-柳儿-天使与堕天使-救赎感极强.png" class="timeline-image">
                 <div class="timeline-desc">我收到了你送的安琪儿，我们一起在那张跑酷图中拍下了这张照片，它仿佛有无尽的救赎感，深入了我的内心</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年8月10日-柳儿-月季花海合照.png', '2024年8月10日', '那天是七夕节，我们在这个我奋斗了那么久的地图中留下了许多回忆，虽然地图已经停止了更新，但我们的记忆依然伴随着我们奋斗下去')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年8月10日-柳儿-月季花海合照.png',
+                'image/2024年8月10日-柳儿-像素画合照.png',
+                'image/2024年8月10日-柳儿-祈愿树旁合照.png',
+                'image/2024年8月10日-柳儿-繁华森林合照.png',
+                'image/2024年8月10日-柳儿-蘑菇房合照.png'
+            ], '2024年8月10日', '那天是七夕节，我们在这个我奋斗了那么久的地图中留下了许多回忆，虽然地图已经停止了更新，但我们的记忆依然伴随着我们奋斗下去')">
                 <div class="timeline-date">2024年8月10日</div>
-                <img src="image/2024年8月10日-柳儿-月季花海合照.png" class="timeline-image">
+                <div class="timeline-image-container">
+                    <img src="image/2024年8月10日-柳儿-月季花海合照.png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>5</span>
+                    </div>
+                </div>
                 <div class="timeline-desc">那天是七夕节，我们在这个我奋斗了那么久的地图中留下了许多回忆，虽然地图已经停止了更新，但我们的记忆依然伴随着我们奋斗下去</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年10月4日-柳儿and樱-十字路口合照.png', '2024年10月4日', '那天我们在小镇，一个人扮演父亲，另一个人扮演母亲，我们三个人像是一家人，那么温馨，那么美好')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年10月4日-柳儿and樱-十字路口合照.png'
+            ], '2024年10月4日', '那天我们在小镇，一个人扮演父亲，另一个人扮演母亲，我们三个人像是一家人，那么温馨，那么美好')">
                 <div class="timeline-date">2024年10月4日</div>
                 <img src="image/2024年10月4日-柳儿and樱-十字路口合照.png" class="timeline-image">
                 <div class="timeline-desc">那天我们在小镇，一个人扮演父亲，另一个人扮演母亲，我们三个人像是一家人，那么温馨，那么美好</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年11月29日-柳儿-树顶拍照-1305x682.png', '2024年11月29日', '我们一起在心链空间拍下了这张照，我多希望我的心能和你的心连在一起，替你承担所有的痛苦与磨难，让你能健康快乐的长大')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年11月29日-柳儿-树顶拍照-1305x682.png'
+            ], '2024年11月29日', '我们一起在心链空间拍下了这张照，我多希望我的心能和你的心连在一起，替你承担所有的痛苦与磨难，让你能健康快乐的长大')">
                 <div class="timeline-date">2024年11月29日</div>
                 <img src="image/2024年11月29日-柳儿-树顶拍照-1305x682.png" class="timeline-image">
                 <div class="timeline-desc">我们一起在心链空间拍下了这张照，我多希望我的心能和你的心连在一起，替你承担所有的痛苦与磨难，让你能健康快乐的长大</div>
             </div>
-            <div class="timeline-item" onclick="showLightbox('image/2024年12月15日-柳儿-像我带着女儿.jpg', '2024年12月15日', '那天我们一起在可以变成怪物的地图中，我们最终击败BOSS，那个在雪原生存中最讨厌的家伙，而我也变成了它，你则是拿着它的脑袋，你在我的臂弯下，仿佛像是我带了女儿一样')">
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年12月15日-柳儿-像我带着女儿.jpg'
+            ], '2024年12月15日', '那天我们一起在可以变成怪物的地图中，我们最终击败BOSS，那个在雪原生存中最讨厌的家伙，而我也变成了它，你则是拿着它的脑袋，你在我的臂弯下，仿佛像是我带了女儿一样')">
                 <div class="timeline-date">2024年12月15日</div>
                 <img src="image/2024年12月15日-柳儿-像我带着女儿.jpg" class="timeline-image">
                 <div class="timeline-desc">那天我们一起在可以变成怪物的地图中，我们最终击败BOSS，那个在雪原生存中最讨厌的家伙，而我也变成了它，你则是拿着它的脑袋，你在我的臂弯下，仿佛像是我带了女儿一样</div>
+            </div>
+            <div class="timeline-item" onclick="showLightbox([
+                'image/2024年12月21日-柳儿-终点前的合照 (1).png',
+                'image/2024年12月21日-柳儿-终点前的合照 (2).png',
+                'image/2024年12月21日-柳儿-草莓前的合照.png',
+                'image/2024年12月21日-柳儿-草莓熊前合照-爱心动作.png'
+            ], '2024年12月21日', '那天我们一起完成了那次跑酷，我们一起寻找适合拍照的地方，拍了许多照片')">
+                <div class="timeline-date">2024年12月21日</div>
+                <div class="timeline-image-container">
+                    <img src="image/2024年12月21日-柳儿-终点前的合照 (1).png" class="timeline-image">
+                    <div class="image-count">
+                        <i class="fas fa-images"></i>
+                        <span>4</span>
+                    </div>
+                </div>
+                <div class="timeline-desc">那天我们一起完成了那次跑酷，我们一起寻找适合拍照的地方，拍了许多照片</div>
             </div>
         </div>
     </div>
@@ -1285,6 +1461,11 @@
             <span class="close-btn" onclick="hideLightbox()">&times;</span>
             <div class="lightbox-image">
                 <img id="lightbox-img" src="">
+                <div class="lightbox-navigation">
+                    <button class="nav-button" id="prev-image" onclick="changeImage(-1)">上一张</button>
+                    <span class="image-counter" id="image-counter">1/1</span>
+                    <button class="nav-button" id="next-image" onclick="changeImage(1)">下一张</button>
+                </div>
             </div>
             <div class="lightbox-info">
                 <h2 id="lightbox-date"></h2>
@@ -1349,7 +1530,7 @@
                         <div class="content-title">更新内容</div>
                         <div class="content-section">
                             <div class="section-title">一、优化</div>
-                            <div class="section-item">1. 优化了侧边菜单开始按钮的层级问题，使得其不会遮挡其他内容</div>
+                            <div class="section-item">1. 优化了侧边菜单开始按钮的层级问题，��得其不会遮挡其他内容</div>
                             <div class="section-item">2. 优化了小惊喜页面的排版，使其更加美观</div>
                             <div class="section-item">3. 优化了小惊喜页面的音乐窗口（当前使用的是测试音乐）</div>
                             <div class="section-item">4. 优化了小惊喜页面的视频窗口，并添加了测试视频</div>
@@ -1367,6 +1548,22 @@
                         </div>
                     </div>
                     <div class="update-date">更新时间：2024年12月20日</div>
+                </div>
+
+                <!-- beta0.6 更新内容 -->
+                <div class="update-card">
+                    <div class="version-number">版本号：beta0.6</div>
+                    <div class="update-content">
+                        <div class="content-title">更新内容</div>
+                        <div class="content-section">
+                            <div class="section-title">一、修改</div>
+                            <div class="section-item">1. 修改 时间线排序 为 里程碑 </div>
+                            <div class="section-item">2. 修改 里程碑 页面下图片为多图片（可切换）</div>
+                            <div class="section-title">二、新增</div>
+                            <div class="section-item">1. 新增 里程碑 页面下图片的切换功能、多图片功能</div>
+                        </div>
+                    </div>
+                    <div class="update-date">更新时间：2024年12月21日</div>
                 </div>
             </div>
         </div>
@@ -1458,30 +1655,81 @@
             document.getElementById('new-surprise-page').style.display = 'none';
         }
 
-        function showLightbox(imgSrc, date, desc) {
+        function showLightbox(images, date, desc) {
+            currentImages = Array.isArray(images) ? images : [images];
+            currentImageIndex = 0;
+            
             const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
             const dateEl = document.getElementById('lightbox-date');
             const descEl = document.getElementById('lightbox-desc');
-
-            if (imgSrc) {
-                img.src = imgSrc;
-                img.style.display = 'block';
-            } else {
-                img.style.display = 'none';
-            }
+            
+            updateLightboxImage();
+            updateNavigationButtons();
             
             dateEl.textContent = date;
             descEl.textContent = desc;
-
+            
             lightbox.style.display = 'block';
             setTimeout(() => lightbox.classList.add('show'), 10);
+        }
 
-            lightbox.addEventListener('wheel', function(event) {
-                event.preventDefault();
-                const delta = Math.sign(event.deltaY);
-                lightbox.scrollTop += delta * 30;
-            });
+        function updateLightboxImage() {
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('image-counter');
+            
+            img.src = currentImages[currentImageIndex];
+            counter.textContent = `${currentImageIndex + 1}/${currentImages.length}`;
+        }
+
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prev-image');
+            const nextButton = document.getElementById('next-image');
+            
+            prevButton.disabled = currentImageIndex === 0;
+            nextButton.disabled = currentImageIndex === currentImages.length - 1;
+        }
+
+        function changeImage(direction) {
+            const newIndex = currentImageIndex + direction;
+            const img = document.getElementById('lightbox-img');
+            
+            if (newIndex < 0) {
+                showFloatingMessage('已经是第一张了');
+                return;
+            }
+            
+            if (newIndex >= currentImages.length) {
+                showFloatingMessage('已经是最后一张了');
+                return;
+            }
+            
+            // 添加退出动画类
+            const exitClass = direction > 0 ? 'slide-left-exit' : 'slide-right-exit';
+            img.classList.add(exitClass);
+            
+            setTimeout(() => {
+                currentImageIndex = newIndex;
+                // 添加进入动画类
+                const enterClass = direction > 0 ? 'slide-left-enter' : 'slide-right-enter';
+                img.classList.add(enterClass);
+                img.classList.remove(exitClass);
+                
+                // 更新图片源
+                img.src = currentImages[currentImageIndex];
+                
+                // 移除进入动画类
+                setTimeout(() => {
+                    img.classList.remove(enterClass);
+                }, 50);
+                
+                updateNavigationButtons();
+                updateCounter();
+            }, 250);
+        }
+
+        function updateCounter() {
+            const counter = document.getElementById('image-counter');
+            counter.textContent = `${currentImageIndex + 1}/${currentImages.length}`;
         }
 
         function hideLightbox() {
