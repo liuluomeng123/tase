@@ -109,7 +109,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1002;
+            z-index: 1003;
             transition: background-color 0.3s ease;
         }
 
@@ -210,7 +210,7 @@
             background-color: rgba(0,0,0,0.9);
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: 1004;
+            z-index: 1005;
         }
 
         .lightbox.show {
@@ -258,7 +258,7 @@
             color: black;
             cursor: pointer;
             transition: transform 0.3s ease;
-            z-index: 1001;
+            z-index: 1000;
         }
 
         .close-btn:hover {
@@ -387,7 +387,7 @@
             padding: 10px 20px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1001;
+            z-index: 1003;
             display: none;
             animation: fadeInOut 3s ease;
         }
@@ -404,7 +404,7 @@
             margin: 200px auto;
             cursor: pointer;
             perspective: 1000px;
-            z-index: 1;
+            z-index: 3;
         }
 
         .envelope-front {
@@ -481,7 +481,7 @@
             background-color: #333;
             color: white;
             transition: left 0.3s ease;
-            z-index: 1002;
+            z-index: 1004;
             padding-top: 60px;
         }
 
@@ -498,13 +498,21 @@
             background-color: #575757;
         }
 
+        /* 修改菜单按钮样式 */
         .menu-btn {
             position: fixed;
             top: 20px;
             left: 20px;
             font-size: 30px;
             cursor: pointer;
-            z-index: 1003;
+            z-index: 1005;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 添加隐藏菜单按钮的样式 */
+        .menu-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .overlay {
@@ -515,7 +523,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1001;
+            z-index: 1003;
         }
 
         /* 更新公告模态框样式 */
@@ -527,7 +535,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1002;
+            z-index: 1004;
             transition: background-color 0.3s ease;
         }
 
@@ -567,7 +575,7 @@
         }
 
         .update-modal-title {
-            font-size: 24px;
+            font-size: 1.8em;  /* 标题大小 */
             font-weight: bold;
             color: #333;
         }
@@ -722,41 +730,21 @@
             position: relative;
         }
 
-        .version-number {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .content-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #444;
+        .update-content {
+            /* 为底部添加足够的内边距，避免与更新时间重叠 */
+            padding-bottom: 40px;
         }
 
         .content-section {
+            font-size: 1em;  /* 正文大小 */
             margin-bottom: 15px;
-        }
-
-        .section-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #555;
-        }
-
-        .section-item {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            line-height: 1.5;
-            color: #666;
         }
 
         .update-date {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            font-family: "黑体";
+            font-size: 1em;
             font-weight: bold;
             color: #333;
         }
@@ -787,7 +775,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1003;
+            z-index: 1005;
             justify-content: center;
             align-items: center;
         }
@@ -814,7 +802,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1002;
+            z-index: 1004;
             transition: background-color 0.3s ease;
         }
 
@@ -956,7 +944,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0);
-            z-index: 1002;
+            z-index: 1004;
             transition: background-color 0.3s ease;
         }
 
@@ -1063,6 +1051,13 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
+        }
+
+        .version-number {
+            font-size: 1.4em;  /* 介于标题和正文之间的大小 */
+            font-weight: bold;  /* 加粗 */
+            color: #333;
+            margin-bottom: 20px;  /* 与正文保持距离 */
         }
     </style>
 </head>
@@ -1323,7 +1318,7 @@
             <div class="update-modal-body">
                 <!-- beta0.4 更新内容 -->
                 <div class="update-card">
-                    <div class="version-number">beta0.4</div>
+                    <div class="version-number">版本号：beta0.4</div>
                     <div class="update-content">
                         <div class="content-title">更新内容</div>
                         <div class="content-section">
@@ -1344,12 +1339,12 @@
                             <div class="section-item">2. 修复了部分区域文本存在乱码的bug</div>
                         </div>
                     </div>
-                    <div class="update-date">2024年12月15日</div>
+                    <div class="update-date">更新时间：2024年12月15日</div>
                 </div>
 
                 <!-- beta0.5 更新内容 -->
                 <div class="update-card">
-                    <div class="version-number">beta0.5</div>
+                    <div class="version-number">版本号：beta0.5</div>
                     <div class="update-content">
                         <div class="content-title">更新内容</div>
                         <div class="content-section">
@@ -1371,7 +1366,7 @@
                             <div class="section-item">1. 移除了beta0.4版本中新增的"隐藏的惊喜、小惊喜中的菜单按钮"</div>
                         </div>
                     </div>
-                    <div class="update-date">2024年12月20日</div>
+                    <div class="update-date">更新时间：2024年12月20日</div>
                 </div>
             </div>
         </div>
@@ -1432,6 +1427,8 @@
         }
 
         function showInitialThoughts() {
+            const menuBtn = document.querySelector('.menu-btn');
+            menuBtn.classList.add('hidden');
             const modal = document.getElementById('thoughts-modal');
             if (modal) {
                 modal.style.display = 'block';
@@ -1711,6 +1708,8 @@
         }
 
         function showUpdateNotice() {
+            const menuBtn = document.querySelector('.menu-btn');
+            menuBtn.classList.add('hidden');
             const modal = document.getElementById('updateModal');
             if (modal) {
                 modal.style.display = 'block';
@@ -1740,6 +1739,8 @@
         }
 
         function closeUpdateModal() {
+            const menuBtn = document.querySelector('.menu-btn');
+            menuBtn.classList.remove('hidden');
             const modal = document.getElementById('updateModal');
             if (modal) {
                 modal.classList.remove('show');
@@ -1754,6 +1755,8 @@
         }
 
         function closeThoughtsModal() {
+            const menuBtn = document.querySelector('.menu-btn');
+            menuBtn.classList.remove('hidden');
             const modal = document.getElementById('thoughts-modal');
             if (modal) {
                 modal.classList.remove('show');
@@ -1811,6 +1814,8 @@
 
         // 显示进度窗口
         function showProgress() {
+            const menuBtn = document.querySelector('.menu-btn');
+            menuBtn.classList.add('hidden');
             const modal = document.getElementById('progress-modal');
             if (modal) {
                 modal.style.display = 'block';
@@ -1823,6 +1828,8 @@
 
         // 关闭进度窗口
         function closeProgressModal() {
+            const menuBtn = document.querySelector('.menu-btn');
+            menuBtn.classList.remove('hidden');
             const modal = document.getElementById('progress-modal');
             if (modal) {
                 modal.classList.remove('show');
