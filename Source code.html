@@ -75,7 +75,7 @@
             cursor: pointer;
             border: none;
             border-radius: 25px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: linear-gradient(135deg, #8AA9E0CC, #8AA9E090);
             color: white;
             transition: all 0.3s ease;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
@@ -83,6 +83,7 @@
 
         .nav-btn:hover {
             transform: translateY(-2px);
+            background: linear-gradient(135deg, #8AA9E0A0, #8AA9E0);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
@@ -244,6 +245,13 @@
             height: 100%;
             object-fit: contain;
             border-radius: 10px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .lightbox-image img.enlarged {
+            transform: scale(1.5);
+            cursor: zoom-out;
         }
 
         .lightbox-info {
@@ -276,77 +284,234 @@
             margin: 0 auto;
         }
 
+        /* 贺图网格布局 */
         .surprise-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 贺图项目容器 */
+        .surprise-item {
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            aspect-ratio: 4/3; /* 固定宽高比 */
+        }
+
+        /* 贺图图片样式 */
+        .surprise-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保图片填充容器但不变形 */
+            transition: transform 0.3s ease;
+        }
+
+        /* 贺图标题 */
+        .surprise-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        /* 贺图悬停效果 */
+        .surprise-item:hover .surprise-image {
+            transform: scale(1.05);
         }
 
         /* 视频容器样式 */
         .video-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 宽高比 */
-            margin-bottom: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* 确保视频保持原始宽高比 */
+        .video-container:fullscreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: black;
+            padding: 0;
         }
 
-        .surprise-item {
-            background-color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .video-container:fullscreen video {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            aspect-ratio: 16/9; /* 保持视频原始比例 */
         }
 
-        .surprise-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .surprise-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-
-        .surprise-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        /* 音乐播放按钮样式 */
-        .music-btn {
-            padding: 12px 25px;
-            font-size: 18px;
-            cursor: pointer;
+        /* 播放按钮样式 */
+        .video-controls .play-btn {
+            background: #8AA9E0;
             border: none;
-            border-radius: 25px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            min-width: 36px;  /* 设置最小宽度 */
+            min-height: 36px;  /* 设置最小高度 */
+            width: 36px;      /* 固定宽度 */
+            height: 36px;     /* 固定高度 */
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
             color: white;
-            margin: 30px auto;
-            display: block;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            font-size: 16px;  /* 稍微调小图标 */
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+            padding: 0;      /* 移除内边距 */
+            margin: 0 5px;   /* 添加水平外边距 */
+            flex-shrink: 0;  /* 防止按钮被压缩 */
         }
 
-        .music-btn:hover {
+        .video-controls .play-btn i {
+            width: auto;     /* 自动宽度 */
+            height: auto;    /* 自动高度 */
+            display: flex;   /* 使用flex布局 */
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;  /* 确保图标大小一致 */
+            line-height: 1;   /* 设置行高为1 */
+        }
+
+        .video-controls .play-btn:hover {
+            background: #7B99D0;
+            transform: scale(1.05);
+        }
+
+        /* 进度条 */
+        .progress {
+            height: 100%;
+            background: #8AA9E0CC;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        /* 导航按钮 */
+        .nav-button {
+            padding: 8px 15px;
+            background: #8AA9E0CC;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #8AA9E0;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* 时间显示样式 */
+        .time-display {
+            color: white;
+            font-size: 12px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* 音量控制样式 */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* 修改视频滑块样式 */
+        .volume-slider {
+            width: 60px;
+            height: 4px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        /* 移除默认视频控件 */
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+
+        video {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* 倍速控制样式 */
+        .playback-rate-btn {
+            color: white;
+            background: transparent;
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .playback-rate-menu {
+            position: absolute;
+            bottom: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 4px;
+            display: none;
+            flex-direction: column;
+            padding: 5px 0;
+        }
+
+        /* 全屏按钮样式 */
+        .fullscreen-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* 控件悬停效果 */
+        .video-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
         }
 
         /* 响应式设计 */
@@ -658,49 +823,63 @@
 
         /* 添加音乐播放器样式 */
         .music-player {
-            background: rgba(255, 255, 255, 0.9);
+            background: white;  /* 改为白色底板 */
             border-radius: 10px;
             padding: 15px;
             width: 80%;
-            max-width: 400px;
+            max-width: 600px;
             margin: 20px auto;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* 添加轻微阴影 */
         }
 
         .song-info {
-            font-size: 14px;
-            color: #666;
+            color: #333;  /* 深色文字，提高可读性 */
+            font-size: 16px;
             margin-bottom: 10px;
+            text-align: center;
+            font-weight: 500;
         }
 
         .controls {
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 5px;
         }
 
         .play-btn {
-            background: #4CAF50;
+            background: rgba(0, 0, 0, 0.15);  /* 增加不透明度 */
             border: none;
-            border-radius: 50%;
             width: 40px;
             height: 40px;
-            color: white;
+            border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.3s ease;
+            transition: all 0.2s ease;
+            color: #333;  /* 深色图标 */
+            font-size: 18px;  /* 增大图标尺寸 */
+            opacity: 1;  /* 确保按钮完全不透明 */
+            visibility: visible;  /* 确保按钮可见 */
+            z-index: 2;  /* 确保按钮在最上层 */
         }
 
         .play-btn:hover {
-            background: #45a049;
+            background: rgba(0, 0, 0, 0.25);  /* 悬停时更深的背景色 */
+            transform: scale(1.05);  /* 悬停时轻微放大 */
+        }
+
+        .play-btn i {
+            opacity: 1;  /* 确保图标完全不透明 */
+            color: #333;  /* 深色图标 */
+            font-size: 18px;  /* 增大图标尺寸 */
         }
 
         .progress-bar {
             flex: 1;
-            height: 5px;
-            background: #ddd;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 3px;
             position: relative;
             cursor: pointer;
@@ -713,24 +892,13 @@
             height: 100%;
             background: #4CAF50;
             border-radius: 3px;
-            width: 0%;
         }
 
         .time {
-            font-size: 12px;
             color: #666;
+            font-size: 14px;
             min-width: 45px;
             text-align: center;
-        }
-
-        /* 更新公告模态框内容 */
-        .update-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
         }
 
         .update-content {
@@ -1037,23 +1205,237 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 宽高比 */
+            max-width: 800px; /* 限制最大宽度 */
+            margin: 0 auto;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 视频控制栏样式 */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;  /* 减小左右内边距 */
+            gap: 4px;  /* 减小元素间距 */
+        }
+
+        /* 全屏按钮样式 */
+        .fullscreen-btn {
+            background: #8AA9E0;
+            border: none;
+            min-width: 36px;
+            min-height: 36px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: white;
+            font-size: 16px;
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+            padding: 0;
+            margin: 0 5px;
+            flex-shrink: 0;
+        }
+
+        .fullscreen-btn:hover {
+            background: #7B99D0;
+            transform: scale(1.05);
+        }
+
+        .fullscreen-btn i {
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* 视频控制栏布局 */
+        .video-controls .progress-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;  /* 调整进度条区域的间距 */
+            margin: 0 4px;  /* 添加适当的外边距 */
+        }
+
+        .video-controls .time {
+            color: white;
+            font-size: 12px;  /* 稍微减小字体 */
+            min-width: 40px;  /* 减小最小宽度 */
+            text-align: center;
+        }
+
+        /* 确保进度条样式正确 */
+        .video-controls .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            margin: 0 2px;  /* 添加适当的外边距 */
+        }
+
+        .video-controls .progress {
+            position: absolute;
+            left: 0;
+            top: 0;
             height: 100%;
-            object-fit: contain;
+            background: #8AA9E0;
+            border-radius: 2px;
+        }
+
+        /* 调整图标大小 */
+        .video-controls .play-btn i,
+        .video-controls .fullscreen-btn i {
+            font-size: 14px;  /* 稍微减小图标大小 */
+        }
+
+        /* 控制按钮样式统一调整 */
+        .video-controls .play-btn,
+        .video-controls .fullscreen-btn {
+            min-width: 32px;  /* 稍微减小按钮尺寸 */
+            min-height: 32px;
+            width: 32px;
+            height: 32px;
+            margin: 0 2px;  /* 减小按钮外边距 */
+        }
+
+        /* 导航按钮 */
+        .nav-button {
+            padding: 8px 15px;
+            background: #8AA9E0CC;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #8AA9E0;
+            transform: translateY(-2px);
+        }
+
+        .nav-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* 时间显示样式 */
+        .time-display {
+            color: white;
+            font-size: 12px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* 音量控制样式 */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .volume-slider {
+            width: 60px;
+            height: 4px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        /* 移除默认视频控件 */
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+
+        video {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* 倍速控制样式 */
+        .playback-rate-btn {
+            color: white;
+            background: transparent;
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .playback-rate-menu {
+            position: absolute;
+            bottom: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 4px;
+            display: none;
+            flex-direction: column;
+            padding: 5px 0;
+        }
+
+        /* 全屏按钮样式 */
+        .fullscreen-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* 控件悬停效果 */
+        .video-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
         }
 
         .surprise-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .version-number {
@@ -1101,17 +1483,18 @@
 
         .nav-button {
             padding: 8px 15px;
-            background: #4CAF50;
+            background: #8AA9E0CC;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
             font-size: 14px;
         }
 
         .nav-button:hover {
-            background: #45a049;
+            background: #8AA9E0;
+            transform: translateY(-2px);
         }
 
         .nav-button:disabled {
@@ -1155,6 +1538,512 @@
             opacity: 0;
             transform: translateX(100%);
         }
+
+        /* 添加全屏图片查看样式 */
+        .fullscreen-image-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            overflow: hidden; /* 添加这行 */
+        }
+
+        .fullscreen-image-view.show {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* 修改容器样式确保统一大小 */
+        .fullscreen-image-container {
+            position: relative;
+            width: 90vw;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: transparent;
+        }
+
+        .fullscreen-image-container.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* 优化控制按钮样式 */
+        .fullscreen-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            display: flex;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            align-items: center;
+            z-index: 10001;
+        }
+
+        .fullscreen-controls.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 按钮样式 */
+        .fullscreen-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .fullscreen-btn i {
+            font-size: 14px;
+        }
+
+        /* 缩放级别显示样式 */
+        .zoom-level {
+            color: white;
+            font-size: 14px;
+            padding: 0 10px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* 图片样式 */
+        .fullscreen-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* 添加这个样式确保图片在放大时也不会超出容器 */
+        .fullscreen-image.dragging {
+            cursor: grabbing;
+            transition: none;
+            max-width: 90%;  /* 添加这行 */
+            max-height: 90%; /* 添加这行 */
+        }
+
+        /* 关闭按钮样式 */
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 10001;
+            opacity: 0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(-90deg);
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+        }
+
+        .fullscreen-close:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .fullscreen-close.show {
+            opacity: 1;
+            transform: rotate(0);
+        }
+
+        /* 控制按钮容器样式 */
+        .fullscreen-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            display: flex;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            align-items: center;
+            z-index: 10001;
+        }
+
+        .fullscreen-controls.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 按钮样式 */
+        .fullscreen-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .fullscreen-btn i {
+            font-size: 14px;
+        }
+
+        /* 缩放级别显示样式 */
+        .zoom-level {
+            color: white;
+            font-size: 14px;
+            padding: 0 10px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* 全屏时的样式 */
+        .fullscreen-image-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .fullscreen-image-view .fullscreen-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .fullscreen-image-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .detail-view-container {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .fullscreen-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .detail-view-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10001;
+            transition: background 0.3s;
+        }
+        
+        .detail-view-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);  /* 更深的底板颜色 */
+            padding: 10px 15px;
+            border-radius: 20px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);  /* 添加边框 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   /* 添加阴影 */
+        }
+        
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);  /* 更明显的按钮颜色 */
+            color: #333;  /* 更深的文字颜色 */
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);  /* 按钮阴影 */
+        }
+        
+        .zoom-level {
+            min-width: 70px;
+            height: 32px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.15);  /* 半透明背景 */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            cursor: default;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .zoom-btn:hover {
+            background: white;
+            transform: scale(1.1);  /* 悬停时轻微放大 */
+        }
+        
+        .fullscreen-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .fullscreen-image:active {
+            cursor: grabbing;
+        }
+        
+        .detail-view-container {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 倒计时容器样式 */
+        .countdown-container {
+            background: rgba(138, 169, 224, 0.1);
+            border: 2px solid rgba(138, 169, 224, 0.3);
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(138, 169, 224, 0.1);
+            backdrop-filter: blur(5px);
+            max-width: 800px;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 169, 224, 0.15);
+            border-color: rgba(138, 169, 224, 0.5);
+        }
+
+        /* 倒计时文本样式 */
+        .countdown-text {
+            font-size: 1.8em;
+            color: #4A5568;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* 数字样式 */
+        .countdown-number {
+            color: #8AA9E0;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 8px;
+            min-width: 40px;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(138, 169, 224, 0.1);
+        }
+
+        /* 单位样式 */
+        .countdown-unit {
+            color: #718096;
+            font-size: 0.9em;
+            margin: 0 2px;
+        }
+
+        /* 倒计时包装器样式 */
+        .countdown-wrapper {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        /* 倒计时容器样式 */
+        .countdown-container {
+            background: rgba(138, 169, 224, 0.1);
+            border: 2px solid rgba(138, 169, 224, 0.3);
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(138, 169, 224, 0.1);
+            backdrop-filter: blur(5px);
+            max-width: 800px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 169, 224, 0.15);
+            border-color: rgba(138, 169, 224, 0.5);
+        }
+
+        /* 倒计时文本样式 */
+        .countdown-text {
+            font-size: 1.8em;
+            color: #4A5568;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* 数字样式 */
+        .countdown-number {
+            color: #8AA9E0;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 8px;
+            min-width: 40px;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(138, 169, 224, 0.1);
+        }
+
+        /* 单位样式 */
+        .countdown-unit {
+            color: #718096;
+            font-size: 0.9em;
+            margin: 0 2px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .countdown-text {
+                font-size: 1.4em;
+            }
+            
+            .countdown-container {
+                padding: 10px 15px;
+            }
+            
+            .countdown-number {
+                min-width: 35px;
+                padding: 4px 8px;
+            }
+        }
+
+        .birthday-message {
+            background: linear-gradient(45deg, #ff69b4, #ff1493, #ff69b4);
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(0.8); }
+            100% { transform: scale(1); }
+        }
+
+        .countdown-number {
+            font-weight: bold;
+            color: #ff1493;
+        }
+
+        .countdown-unit {
+            margin-right: 10px;
+        }
+
+        .countdown-text {
+            font-size: 1.2em;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -1166,12 +2055,23 @@
         <button class="nav-btn" onclick="showSurprise()">小惊喜</button>
     </div>
 
+    <div class="countdown-wrapper">
+        <div class="countdown-container">
+            <div class="countdown-text">
+                距离柳儿生日还有
+                <span class="countdown-number">--</span><span class="countdown-unit">天</span>
+                <span class="countdown-number">--</span><span class="countdown-unit">小时</span>
+                <span class="countdown-number">--</span><span class="countdown-unit">分钟</span>
+                <span class="countdown-number">--</span><span class="countdown-unit">秒</span>
+            </div>
+        </div>
+    </div>
+
     <div id="home-page">
         <img src="image\独角兽棋子-生日快乐.png" class="home-decoration left-top">
         <img src="image\金箔大气生日快乐.png" class="home-decoration right-top">
         <img src="image\生日快乐蛋糕.png" class="home-decoration left-bottom">
         <img src="image\生日快乐艺术字.png" class="home-decoration right-bottom">
-        <div class="countdown" id="countdown"></div>
         <div class="nav-buttons">
             <button class="nav-btn" onclick="showInitialThoughts()">建站初心</button>
         </div>
@@ -1565,6 +2465,28 @@
                     </div>
                     <div class="update-date">更新时间：2024年12月21日</div>
                 </div>
+
+                <!-- beta0.7 更新内容 -->
+                <div class="update-card">
+                    <div class="version-number">版本号：beta0.7</div>
+                    <div class="update-content">
+                        <div class="content-title">更新内容</div>
+                        <div class="content-section">
+                            <div class="section-title">一、优化</div>
+                            <div class="section-item">1. 优化了小惊喜页面视频组件、贺图组件</div>
+                            <div class="section-item">2. 优化了里程碑的图片及按钮</div>
+                            <div class="section-item">3. 优化了首页倒计时组件</div>
+                            <div class="section-title">二、新增</div>
+                            <div class="section-item">1. 新增里程碑页面下图片的放大查看功能，单击里程碑下的图片组，在弹出的页面下点击图片即可放大查看</div>
+                            <div class="section-title">三、修复</div>
+                            <div class="section-item">1. 修复了倒计时组件到时间后不显示生日祝福的bug</div>
+                            <div class="section-title">四、修改</div>
+                            <div class="section-item">1. 将导航栏等处的按钮样式进行修改，使其更加美观</div>
+                        </div>
+                    </div>
+                    <div class="update-date">更新时间：2024年12月28日</div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -1604,24 +2526,123 @@
                 });
         }
 
-        // 计算距离下一个生日的时间
-        function updateCountdown() {
-            const now = new Date();
-            let nextBirthday = new Date(now.getFullYear(), 3, 7); // 4月7日
+        // 检查是否为首页的函数
+        function isHomePage() {
+            // 获取当前页面的路径
+            const currentPath = window.location.pathname;
+            
+            // 检查是否包含其他页面的标识
+            const isOtherPage = currentPath.includes('milestone.html') || 
+                               currentPath.includes('surprise.html') || 
+                               currentPath.includes('memory.html');
+            
+            // 如果不是其他页面，则认为是首页
+            return !isOtherPage;
+        }
 
-            if (now > nextBirthday) {
-                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+        // 计算下一个生日的函数
+        function getNextBirthday() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const birthday = new Date(currentYear, 3, 7); // 4月7日
+            
+            if (now > birthday) {
+                birthday.setFullYear(currentYear + 1);
+            }
+            
+            return birthday;
+        }
+
+        // 数字补零函数
+        function padZero(num) {
+            return num < 10 ? `0${num}` : num;
+        }
+
+        // 检查是否为生日当天
+        function isBirthday(date) {
+            return date.getMonth() === 3 && date.getDate() === 7; // 4月7日
+        }
+
+        // 检查是否已过生日但还未到第二天
+        function isBirthdayPeriod(now, targetDate) {
+            return isBirthday(now) && now < new Date(now.getFullYear(), 3, 8, 0, 0, 0);
+        }
+
+        // 更新倒计时的函数
+        function updateCountdown() {
+            const countdownText = document.querySelector('.countdown-text');
+            if (!countdownText) return;
+
+            const now = new Date();
+            const targetDate = getNextBirthday();
+            
+            // 如果是生日当天
+            if (isBirthdayPeriod(now, targetDate)) {
+                countdownText.innerHTML = `
+                    <span class="birthday-message">今天是我的小呆瓜的生日，祝小柳儿生日快乐！🎂✨</span>
+                `;
+                return;
             }
 
-            const diff = nextBirthday - now;
+            const diff = targetDate - now;
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            document.getElementById('countdown').textContent = 
-                `距离柳儿生日还有${days}天${hours}小时${minutes}分钟${seconds}秒`;
+            countdownText.innerHTML = `
+                距离柳儿生日还有
+                <span class="countdown-number">${days}</span><span class="countdown-unit">天</span>
+                <span class="countdown-number">${padZero(hours)}</span><span class="countdown-unit">小时</span>
+                <span class="countdown-number">${padZero(minutes)}</span><span class="countdown-unit">分钟</span>
+                <span class="countdown-number">${padZero(seconds)}</span><span class="countdown-unit">秒</span>
+            `;
         }
+
+        // 初始化倒计时组件
+        function initCountdown() {
+            // 只在首页初始化倒计时
+            if (!isHomePage()) {
+                // 如果不是首页，移除已存在的倒计时组件
+                const existingCountdown = document.querySelector('.countdown-wrapper');
+                if (existingCountdown) {
+                    existingCountdown.remove();
+                }
+                return;
+            }
+
+            // 检查是否已存在倒计时组件
+            if (document.querySelector('.countdown-wrapper')) return;
+
+            // 创建倒计时容器
+            const countdownWrapper = document.createElement('div');
+            countdownWrapper.className = 'countdown-wrapper';
+            countdownWrapper.innerHTML = `
+                <div class="countdown-container">
+                    <div class="countdown-text">
+                        距离柳儿生日还有
+                        <span class="countdown-number">--</span><span class="countdown-unit">天</span>
+                        <span class="countdown-number">--</span><span class="countdown-unit">小时</span>
+                        <span class="countdown-number">--</span><span class="countdown-unit">分钟</span>
+                        <span class="countdown-number">--</span><span class="countdown-unit">秒</span>
+                    </div>
+                </div>
+            `;
+            
+            // 将倒计时插入到导航栏后面
+            const navBar = document.querySelector('.nav-bar');
+            if (navBar && navBar.parentNode) {
+                navBar.parentNode.insertBefore(countdownWrapper, navBar.nextSibling);
+                
+                // 启动倒计时
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }
+        }
+
+        // 在页面加载和切换页面时都初始化倒计时
+        document.addEventListener('DOMContentLoaded', initCountdown);
+        window.addEventListener('popstate', initCountdown);
 
         function showInitialThoughts() {
             const menuBtn = document.querySelector('.menu-btn');
@@ -1640,37 +2661,307 @@
             document.getElementById('home-page').style.display = 'block';
             document.getElementById('timeline-page').style.display = 'none';
             document.getElementById('surprise-page').style.display = 'none';
+            updateCountdownVisibility(); // 添加这行
         }
 
         function showTimeline() {
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('timeline-page').style.display = 'block';
             document.getElementById('surprise-page').style.display = 'none';
+            updateCountdownVisibility(); // 添加这行
         }
 
         function showSurprise() {
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('timeline-page').style.display = 'none';
             document.getElementById('surprise-page').style.display = 'block';
-            document.getElementById('new-surprise-page').style.display = 'none';
+            updateCountdownVisibility(); // 添加这行
         }
 
-        function showLightbox(images, date, desc) {
-            currentImages = Array.isArray(images) ? images : [images];
-            currentImageIndex = 0;
-            
+        function showLightbox(imageSrc, date, description) {
             const lightbox = document.getElementById('lightbox');
-            const dateEl = document.getElementById('lightbox-date');
-            const descEl = document.getElementById('lightbox-desc');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxDate = document.getElementById('lightbox-date');
+            const lightboxDesc = document.getElementById('lightbox-desc');
+            const imageCounter = document.getElementById('image-counter');
+            const prevButton = document.getElementById('prev-image');
+            const nextButton = document.getElementById('next-image');
             
-            updateLightboxImage();
-            updateNavigationButtons();
+            // 设置放大页面的内容
+            if (Array.isArray(imageSrc)) {
+                currentImages = imageSrc;
+                currentImageIndex = 0;
+                lightboxImg.src = imageSrc[0];
+                imageCounter.textContent = `1/${imageSrc.length}`;
+                
+                // 设置导航按钮状态
+                prevButton.disabled = true; // 第一张图片时禁用上一页按钮
+                nextButton.disabled = imageSrc.length === 1; // 只有一张图片时禁用下一页按钮
+                
+                // 添加视觉反馈
+                prevButton.style.opacity = '0.5';
+                prevButton.style.cursor = 'not-allowed';
+                if (imageSrc.length === 1) {
+                    nextButton.style.opacity = '0.5';
+                    nextButton.style.cursor = 'not-allowed';
+                } else {
+                    nextButton.style.opacity = '1';
+                    nextButton.style.cursor = 'pointer';
+                }
+            } else {
+                currentImages = [imageSrc];
+                currentImageIndex = 0;
+                lightboxImg.src = imageSrc;
+                imageCounter.textContent = '1/1';
+                
+                // 单张图片时禁用两个导航按钮
+                prevButton.disabled = true;
+                nextButton.disabled = true;
+                
+                // 添加视觉反馈
+                prevButton.style.opacity = '0.5';
+                nextButton.style.opacity = '0.5';
+                prevButton.style.cursor = 'not-allowed';
+                nextButton.style.cursor = 'not-allowed';
+            }
             
-            dateEl.textContent = date;
-            descEl.textContent = desc;
+            lightboxDate.textContent = date || '';
+            lightboxDesc.textContent = description || '';
             
+            // 显示放大页面
             lightbox.style.display = 'block';
             setTimeout(() => lightbox.classList.add('show'), 10);
+            
+            // 移除旧的点击事件监听器
+            lightboxImg.removeEventListener('click', showDetailView);
+            
+            // 创建详情视图的函数
+            function showDetailView(e) {
+                e.stopPropagation();
+                
+                // 移除所有现有的详情视图
+                document.querySelectorAll('.fullscreen-image-view').forEach(v => v.remove());
+                
+                // 创建新的详情视图
+                const viewer = document.createElement('div');
+                viewer.className = 'fullscreen-image-view';
+                
+                // 创建图片容器
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'detail-view-container';
+                
+                // 创建图片元素
+                const img = document.createElement('img');
+                img.className = 'fullscreen-image';
+                img.src = lightboxImg.src;
+                img.draggable = false;
+                
+                // 添加到DOM
+                imgContainer.appendChild(img);
+                viewer.appendChild(imgContainer);
+                document.body.appendChild(viewer);
+                
+                // 添加关闭按钮
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'detail-view-close';
+                closeBtn.innerHTML = '&times;';
+                closeBtn.title = '关闭';
+                viewer.appendChild(closeBtn);
+                
+                // 变量初始化
+                let isDragging = false;
+                let startX, startY;
+                let translateX = 0;
+                let translateY = 0;
+                let currentScale = 1;
+                const SCALE_LIMITS = {
+                    min: 0.5,
+                    max: 3
+                };
+                
+                // 创建缩放控制
+                const zoomControls = document.createElement('div');
+                zoomControls.className = 'zoom-controls';
+                
+                const zoomOut = document.createElement('button');
+                zoomOut.className = 'zoom-btn';
+                zoomOut.innerHTML = '-';
+                zoomOut.title = '缩小';
+                
+                const zoomLevel = document.createElement('button');
+                zoomLevel.className = 'zoom-level';
+                zoomLevel.innerHTML = '100%';
+                zoomLevel.title = '当前比例';
+                zoomLevel.disabled = true;
+                
+                const zoomIn = document.createElement('button');
+                zoomIn.className = 'zoom-btn';
+                zoomIn.innerHTML = '+';
+                zoomIn.title = '放大';
+                
+                const resetZoom = document.createElement('button');
+                resetZoom.className = 'zoom-btn';
+                resetZoom.innerHTML = '↺';
+                resetZoom.title = '重置大小';
+                
+                // 组装缩放控制
+                zoomControls.appendChild(zoomOut);
+                zoomControls.appendChild(zoomLevel);
+                zoomControls.appendChild(zoomIn);
+                zoomControls.appendChild(resetZoom);
+                viewer.appendChild(zoomControls);
+                
+                // 更新图片变换函数
+                function updateImageTransform() {
+                    img.style.transform = `scale(${currentScale}) translate(${translateX/currentScale}px, ${translateY/currentScale}px)`;
+                }
+                
+                // 更新缩放函数
+                function updateScale(newScale) {
+                    const oldScale = currentScale;
+                    currentScale = Math.min(Math.max(newScale, SCALE_LIMITS.min), SCALE_LIMITS.max);
+                    
+                    // 获取容器和图片的尺寸
+                    const containerRect = imgContainer.getBoundingClientRect();
+                    const imgRect = img.getBoundingClientRect();
+                    
+                    // 计算新的缩放后的尺寸
+                    const newScaledWidth = imgRect.width * (currentScale / oldScale);
+                    const newScaledHeight = imgRect.height * (currentScale / oldScale);
+                    
+                    // 调整位移以保持图片在视图中心
+                    translateX = translateX * (currentScale / oldScale);
+                    translateY = translateY * (currentScale / oldScale);
+                    
+                    // 如果缩放后的尺寸小于容器，则居中显示
+                    if (newScaledWidth <= containerRect.width) {
+                        translateX = 0;
+                    } else {
+                        // 确保缩放后图片不会露出空白
+                        const maxX = (newScaledWidth - containerRect.width) / 2;
+                        translateX = Math.min(Math.max(translateX, -maxX), maxX);
+                    }
+                    
+                    if (newScaledHeight <= containerRect.height) {
+                        translateY = 0;
+                    } else {
+                        // 确保缩放后图片不会露出空白
+                        const maxY = (newScaledHeight - containerRect.height) / 2;
+                        translateY = Math.min(Math.max(translateY, -maxY), maxY);
+                    }
+                    
+                    updateImageTransform();
+                    zoomLevel.innerHTML = `${Math.round(currentScale * 100)}%`;
+                }
+                
+                // 绑定缩放按钮事件
+                zoomIn.onclick = (e) => {
+                    e.stopPropagation();
+                    updateScale(currentScale + 0.2);
+                };
+                
+                zoomOut.onclick = (e) => {
+                    e.stopPropagation();
+                    updateScale(currentScale - 0.2);
+                };
+                
+                resetZoom.onclick = (e) => {
+                    e.stopPropagation();
+                    currentScale = 1;
+                    translateX = 0;
+                    translateY = 0;
+                    updateImageTransform();
+                    zoomLevel.innerHTML = '100%';
+                };
+                
+                // 绑定拖拽事件
+                img.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    startX = e.clientX - translateX;
+                    startY = e.clientY - translateY;
+                    img.style.cursor = 'grabbing';
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('mousemove', function(e) {
+                    if (!isDragging) return;
+                    
+                    let newTranslateX = e.clientX - startX;
+                    let newTranslateY = e.clientY - startY;
+                    
+                    const imgRect = img.getBoundingClientRect();
+                    const containerRect = imgContainer.getBoundingClientRect();
+                    
+                    // 计算图片的实际尺寸（考虑缩放）
+                    const scaledWidth = imgRect.width * currentScale;
+                    const scaledHeight = imgRect.height * currentScale;
+                    
+                    // 计算容器和图片的尺寸差
+                    const diffX = containerRect.width - scaledWidth;
+                    const diffY = containerRect.height - scaledHeight;
+                    
+                    // 如果图片小于容器，居中显示
+                    if (scaledWidth <= containerRect.width) {
+                        translateX = 0;
+                    } else {
+                        // 确保图片左边缘不会超出容器左边缘
+                        const minX = Math.min(0, diffX);
+                        // 确保图片右边缘不会超出容器右边缘
+                        const maxX = Math.max(0, -diffX);
+                        translateX = Math.min(Math.max(newTranslateX, minX), maxX);
+                    }
+                    
+                    if (scaledHeight <= containerRect.height) {
+                        translateY = 0;
+                    } else {
+                        // 确保图片上边缘不会超出容器上边缘
+                        const minY = Math.min(0, diffY);
+                        // 确保图片下边缘不会超出容器下边缘
+                        const maxY = Math.max(0, -diffY);
+                        translateY = Math.min(Math.max(newTranslateY, minY), maxY);
+                    }
+                    
+                    updateImageTransform();
+                });
+                
+                document.addEventListener('mouseup', function() {
+                    if (isDragging) {
+                        isDragging = false;
+                        img.style.cursor = 'grab';
+                        correctPosition(); // 添加位置校正
+                    }
+                });
+                
+                // 绑定关闭事件
+                closeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    viewer.remove();
+                };
+                
+                viewer.onclick = (e) => {
+                    if (e.target === viewer) {
+                        viewer.remove();
+                    }
+                };
+                
+                // ESC键关闭
+                const handleKeyDown = (e) => {
+                    if (e.key === 'Escape') {
+                        viewer.remove();
+                        document.removeEventListener('keydown', handleKeyDown);
+                    }
+                };
+                document.addEventListener('keydown', handleKeyDown);
+                
+                // 触发显示动画
+                requestAnimationFrame(() => {
+                    viewer.classList.add('show');
+                });
+            }
+            
+            // 添加点击事件监听器
+            lightboxImg.removeEventListener('click', showDetailView);
+            lightboxImg.addEventListener('click', showDetailView);
         }
 
         function updateLightboxImage() {
@@ -1691,15 +2982,11 @@
 
         function changeImage(direction) {
             const newIndex = currentImageIndex + direction;
+            const prevButton = document.getElementById('prev-image');
+            const nextButton = document.getElementById('next-image');
             const img = document.getElementById('lightbox-img');
             
-            if (newIndex < 0) {
-                showFloatingMessage('已经是第一张了');
-                return;
-            }
-            
-            if (newIndex >= currentImages.length) {
-                showFloatingMessage('已经是最后一张了');
+            if (newIndex < 0 || newIndex >= currentImages.length) {
                 return;
             }
             
@@ -1709,6 +2996,16 @@
             
             setTimeout(() => {
                 currentImageIndex = newIndex;
+                // 更新导航按钮状态
+                prevButton.disabled = currentImageIndex === 0;
+                nextButton.disabled = currentImageIndex === currentImages.length - 1;
+                
+                // 更新视觉反馈
+                prevButton.style.opacity = currentImageIndex === 0 ? '0.5' : '1';
+                nextButton.style.opacity = currentImageIndex === currentImages.length - 1 ? '0.5' : '1';
+                prevButton.style.cursor = currentImageIndex === 0 ? 'not-allowed' : 'pointer';
+                nextButton.style.cursor = currentImageIndex === currentImages.length - 1 ? 'not-allowed' : 'pointer';
+                
                 // 添加进入动画类
                 const enterClass = direction > 0 ? 'slide-left-enter' : 'slide-right-enter';
                 img.classList.add(enterClass);
@@ -1722,7 +3019,6 @@
                     img.classList.remove(enterClass);
                 }, 50);
                 
-                updateNavigationButtons();
                 updateCounter();
             }, 250);
         }
@@ -1733,6 +3029,9 @@
         }
 
         function hideLightbox() {
+            const img = document.getElementById('lightbox-img');
+            img.classList.remove('enlarged'); // 移除放大状态
+            
             const lightbox = document.getElementById('lightbox');
             lightbox.classList.remove('show');
             setTimeout(() => lightbox.style.display = 'none', 300);
@@ -1754,19 +3053,79 @@
             }
         }
 
+        // 添加音视频管理
+        let currentPlayingMedia = null;
+
+        // 添加音视频播放控制函数
+        function handleMediaPlay(mediaElement) {
+            // 如果有其他媒体正在播放且不是当前要播放的媒体
+            if (currentPlayingMedia && currentPlayingMedia !== mediaElement) {
+                // 暂停当前播放的媒体
+                currentPlayingMedia.pause();
+                
+                // 如果是音乐，更新播放按钮图标
+                if (currentPlayingMedia.id === 'bgMusic') {
+                    const playBtn = document.getElementById('playBtn');
+                    const icon = playBtn.querySelector('i');
+                    icon.className = 'fas fa-play';
+                }
+            }
+            
+            // 更新当前播放的媒体
+            currentPlayingMedia = mediaElement;
+        }
+
+        // 修改音乐播放函数
         function toggleMusic() {
             const music = document.getElementById('bgMusic');
             const playBtn = document.getElementById('playBtn');
             const icon = playBtn.querySelector('i');
             
             if (music.paused) {
+                handleMediaPlay(music); // 添加这行
                 music.play();
                 icon.className = 'fas fa-pause';
             } else {
                 music.pause();
                 icon.className = 'fas fa-play';
+                currentPlayingMedia = null; // 添加这行
             }
         }
+
+        // 页面加载完成后为所有视频添加事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有视频元素添加播放事件监听
+            document.querySelectorAll('video').forEach(video => {
+                video.addEventListener('play', function() {
+                    handleMediaPlay(this);
+                });
+                
+                video.addEventListener('pause', function() {
+                    if (currentPlayingMedia === this) {
+                        currentPlayingMedia = null;
+                    }
+                });
+                
+                video.addEventListener('ended', function() {
+                    if (currentPlayingMedia === this) {
+                        currentPlayingMedia = null;
+                    }
+                });
+            });
+            
+            // 为背景音乐添加事件监听
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.addEventListener('ended', function() {
+                    if (currentPlayingMedia === this) {
+                        currentPlayingMedia = null;
+                        const playBtn = document.getElementById('playBtn');
+                        const icon = playBtn.querySelector('i');
+                        icon.className = 'fas fa-play';
+                    }
+                });
+            }
+        });
 
         // 添加音乐进度更新功能
         document.getElementById('bgMusic').addEventListener('timeupdate', function() {
@@ -2170,6 +3529,924 @@
                 });
             }, 3000);
         }
+
+        // 添加全屏查看相关函数
+        function showFullscreenImage(imgSrc) {
+            // 创建全屏查看容器
+            const fullscreenView = document.createElement('div');
+            fullscreenView.className = 'fullscreen-image-view';
+            
+            // 创建图片容器
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'fullscreen-image-container';
+            
+            // 创建图片元素
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.className = 'fullscreen-image';
+            
+            // 创建关闭按钮
+            const closeBtn = document.createElement('span');
+            closeBtn.className = 'fullscreen-close';
+            closeBtn.innerHTML = '&times;';
+            
+            // 创建控制按钮容器
+            const controls = document.createElement('div');
+            controls.className = 'fullscreen-controls';
+            
+            // 创建缩放级别显示
+            const zoomLevel = document.createElement('span');
+            zoomLevel.className = 'zoom-level';
+            zoomLevel.textContent = '100%';
+            
+            // 创建放大按钮
+            const zoomInBtn = document.createElement('button');
+            zoomInBtn.className = 'fullscreen-btn';
+            zoomInBtn.innerHTML = '<i class="fas fa-search-plus"></i> 放大';
+            
+            // 创建缩小按钮
+            const zoomOutBtn = document.createElement('button');
+            zoomOutBtn.className = 'fullscreen-btn';
+            zoomOutBtn.innerHTML = '<i class="fas fa-search-minus"></i> 缩小';
+            
+            // 创建重置按钮
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'fullscreen-btn';
+            resetBtn.innerHTML = '<i class="fas fa-undo"></i> 重置';
+            
+            // 组装控制按钮
+            controls.appendChild(zoomOutBtn);
+            controls.appendChild(zoomLevel);
+            controls.appendChild(zoomInBtn);
+            controls.appendChild(resetBtn);
+            
+            // 组装页面元素
+            imageContainer.appendChild(img);
+            fullscreenView.appendChild(closeBtn);
+            fullscreenView.appendChild(imageContainer);
+            fullscreenView.appendChild(controls);
+            
+            // 添加到页面并显示
+            document.body.appendChild(fullscreenView);
+            
+            // 触发动画
+            requestAnimationFrame(() => {
+                fullscreenView.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    fullscreenView.classList.add('show');
+                    imageContainer.classList.add('show');
+                    controls.classList.add('show');
+                    closeBtn.classList.add('show');
+                });
+            });
+
+            // 添加拖动相关变量
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+            let currentScale = 1;
+
+            // 更新setTransform函数
+            function setTransform(element, x, y, scale = null) {
+                if (scale !== null) {
+                    currentScale = scale;
+                }
+                
+                // 获取容器和图片的尺寸
+                const containerRect = imageContainer.getBoundingClientRect();
+                const imgRect = element.getBoundingClientRect();
+                
+                // 计算缩放后的图片尺寸
+                const scaledWidth = imgRect.width / currentScale;
+                const scaledHeight = imgRect.height / currentScale;
+                
+                // 计算可移动的最大范围
+                const maxX = Math.max(0, (scaledWidth * currentScale - containerRect.width) / 2);
+                const maxY = Math.max(0, (scaledHeight * currentScale - containerRect.height) / 2);
+                
+                // 限制移动范围
+                if (currentScale <= 1) {
+                    x = 0;
+                    y = 0;
+                } else {
+                    // 确保图片不会移出容器边界
+                    x = Math.min(Math.max(x, -maxX), maxX);
+                    y = Math.min(Math.max(y, -maxY), maxY);
+                }
+                
+                xOffset = x;
+                yOffset = y;
+                
+                element.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${currentScale})`;
+            }
+
+            // 更新按钮事件处理
+            zoomInBtn.onclick = () => {
+                if (currentScale < 2) {
+                    currentScale = Math.min(currentScale + 0.2, 2);
+                    setTransform(img, xOffset, yOffset, currentScale);
+                    zoomLevel.textContent = `${Math.round(currentScale * 100)}%`;
+                }
+            };
+            
+            zoomOutBtn.onclick = () => {
+                if (currentScale > 0.4) {
+                    currentScale = Math.max(currentScale - 0.2, 0.4);
+                    setTransform(img, xOffset, yOffset, currentScale);
+                    zoomLevel.textContent = `${Math.round(currentScale * 100)}%`;
+                }
+            };
+            
+            resetBtn.onclick = () => {
+                currentScale = 1;
+                xOffset = 0;
+                yOffset = 0;
+                setTransform(img, 0, 0, 1);
+                zoomLevel.textContent = '100%';
+            };
+            
+            closeBtn.onclick = () => {
+                // 移除所有事件监听器
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('mouseup', dragEnd);
+                fullscreenView.removeEventListener('wheel', handleWheel);
+                
+                // 移除动画类
+                fullscreenView.classList.remove('show');
+                imageContainer.classList.remove('show');
+                controls.classList.remove('show');
+                closeBtn.classList.remove('show');
+                
+                // 禁用所有交互
+                img.style.pointerEvents = 'none';
+                closeBtn.style.pointerEvents = 'none';
+                controls.style.pointerEvents = 'none';
+                
+                // 等待动画完成后移除元素
+                setTimeout(() => {
+                    if (document.body.contains(fullscreenView)) {
+                        document.body.removeChild(fullscreenView);
+                    }
+                }, 300);
+            };
+
+            // 添加拖动事件处理
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    const dx = e.clientX - initialX;
+                    const dy = e.clientY - initialY;
+                    
+                    currentX = xOffset + dx;
+                    currentY = yOffset + dy;
+                    
+                    setTransform(img, currentX, currentY);
+                }
+            }
+
+            function dragEnd(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    initialX = currentX;
+                    initialY = currentY;
+                    isDragging = false;
+                    img.classList.remove('dragging');
+                }
+            }
+
+            img.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                isDragging = true;
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                img.classList.add('dragging');
+            });
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            // 将滚轮事件处理函数单独定义，以便移除
+            function handleWheel(e) {
+                e.preventDefault();
+                if (currentScale > 1) {
+                    const scrollAmount = e.deltaY * 0.5;
+                    const newY = yOffset + scrollAmount;
+                    setTransform(img, xOffset, newY);
+                }
+            }
+
+            // 添加滚轮事件
+            fullscreenView.addEventListener('wheel', handleWheel, { passive: false });
+        }
+
+        // 修改视频控件创建函数
+        function createVideoControls(container, video) {
+            // 移除默认控件
+            video.controls = false;
+            
+            const controls = document.createElement('div');
+            controls.className = 'video-controls';
+            
+            // 播放/暂停按钮
+            const playBtn = document.createElement('button');
+            playBtn.className = 'play-btn';
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            
+            // 进度条
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            const progress = document.createElement('div');
+            progress.className = 'progress';
+            progressBar.appendChild(progress);
+            
+            // 时间显示
+            const timeDisplay = document.createElement('div');
+            timeDisplay.className = 'time-display';
+            
+            // 音量控制
+            const volumeControl = document.createElement('div');
+            volumeControl.className = 'volume-control';
+            const volumeBtn = document.createElement('button');
+            volumeBtn.className = 'volume-btn';
+            volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            const volumeSlider = document.createElement('input');
+            volumeSlider.type = 'range';
+            volumeSlider.className = 'volume-slider';
+            volumeSlider.min = '0';
+            volumeSlider.max = '1';
+            volumeSlider.step = '0.1';
+            volumeSlider.value = '1';
+            
+            // 倍速控制
+            const rateBtn = document.createElement('button');
+            rateBtn.className = 'playback-rate-btn';
+            rateBtn.textContent = '1.0x';
+            
+            const rateMenu = document.createElement('div');
+            rateMenu.className = 'playback-rate-menu';
+            
+            const rates = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
+            
+            rates.forEach(rate => {
+                const option = document.createElement('div');
+                option.className = 'rate-option';
+                option.textContent = `${rate}x`;
+                if (rate === 1.0) option.classList.add('active');
+                
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    video.playbackRate = rate;
+                    rateBtn.textContent = `${rate}x`;
+                    
+                    // 更新选中状态
+                    rateMenu.querySelectorAll('.rate-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // 隐藏菜单
+                    rateMenu.style.display = 'none';
+                });
+                
+                rateMenu.appendChild(option);
+            });
+            
+            // 倍速按钮点击事件
+            rateBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // 切换菜单显示状态
+                rateMenu.style.display = rateMenu.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            // 点击其他地方关闭菜单
+            document.addEventListener('click', function() {
+                rateMenu.style.display = 'none';
+            });
+            
+            // 添加倍速控件样式
+            const style = document.createElement('style');
+            style.textContent = `
+                .playback-rate-menu {
+                    position: absolute;
+                    bottom: 40px;
+                    right: 10px;
+                    background: rgba(0, 0, 0, 0.9);
+                    border-radius: 4px;
+                    padding: 5px 0;
+                    display: none;
+                    z-index: 1000;
+                }
+                
+                .rate-option {
+                    color: white;
+                    padding: 5px 15px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                }
+                
+                .rate-option:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                }
+                
+                .rate-option.active {
+                    background: rgba(255, 255, 255, 0.3);
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 将倍速控件添加到控制栏
+            controls.appendChild(rateBtn);
+            controls.appendChild(rateMenu);
+            
+            // 组装控件
+            volumeControl.appendChild(volumeBtn);
+            volumeControl.appendChild(volumeSlider);
+            
+            controls.appendChild(playBtn);
+            controls.appendChild(progressBar);
+            controls.appendChild(timeDisplay);
+            controls.appendChild(volumeControl);
+            
+            container.appendChild(controls);
+            
+            // ... 添加事件处理代码 ...
+
+            // 添加事件处理
+            playBtn.onclick = () => {
+                if (video.paused) {
+                    handleMediaPlay(video);
+                    video.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    video.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    currentPlayingMedia = null;
+                }
+            };
+
+            // 添加视频结束事件监听
+            video.addEventListener('ended', () => {
+                video.currentTime = 0; // 重置视频到开始位置
+                playBtn.innerHTML = '<i class="fas fa-play"></i>'; // 重置按钮为播放图标
+                currentPlayingMedia = null;
+            });
+
+            // 添加视频加载完成事件监听
+            video.addEventListener('loadedmetadata', () => {
+                // 更新总时长显示
+                const duration = formatTime(video.duration);
+                timeDisplay.textContent = `0:00 / ${duration}`;
+            });
+
+            // 添加视频播放状态变化监听
+            video.addEventListener('play', () => {
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            });
+
+            video.addEventListener('pause', () => {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+
+            // 进度条事件
+            progressBar.onclick = (e) => {
+                const rect = progressBar.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                video.currentTime = pos * video.duration;
+            };
+
+            // 更新进度条和时间显示
+            video.addEventListener('timeupdate', () => {
+                const currentTime = formatTime(video.currentTime);
+                const duration = formatTime(video.duration);
+                timeDisplay.textContent = `${currentTime} / ${duration}`;
+                progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
+            });
+
+            // 音量控制
+            volumeBtn.onclick = () => {
+                if (video.volume > 0) {
+                    video.volume = 0;
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    volumeSlider.value = 0;
+                } else {
+                    video.volume = 1;
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    volumeSlider.value = 1;
+                }
+            };
+
+            volumeSlider.oninput = (e) => {
+                video.volume = e.target.value;
+                volumeBtn.innerHTML = video.volume === 0 ? 
+                    '<i class="fas fa-volume-mute"></i>' : 
+                    '<i class="fas fa-volume-up"></i>';
+            };
+
+            // 创建全屏按钮
+            const fullscreenBtn = document.createElement('button');
+            fullscreenBtn.className = 'fullscreen-btn';
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+
+            // 全屏按钮事件
+            fullscreenBtn.onclick = () => {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                } else {
+                    container.requestFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                }
+            };
+
+            // 按照新的顺序组装控件
+            controls.appendChild(playBtn);
+            controls.appendChild(progressBar);
+            controls.appendChild(timeDisplay);
+            controls.appendChild(volumeControl);
+            controls.appendChild(rateBtn);
+            controls.appendChild(rateMenu);
+            controls.appendChild(fullscreenBtn);
+        }
+
+        // 格式化时间函数
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        // 初始化所有视频
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.video-container').forEach(container => {
+                const video = container.querySelector('video');
+                if (video) {
+                    createVideoControls(container, video);
+                }
+            });
+        });
+
+        // 音乐播放器控制
+        function initMusicPlayer() {
+            const music = document.getElementById('bgMusic');
+            const playBtn = document.getElementById('playBtn');
+            const progressBar = document.getElementById('musicProgress');
+            const volumeControl = document.getElementById('volumeControl');
+            
+            if (!music || !playBtn || !progressBar || !volumeControl) return;
+            
+            // 更新进度条
+            music.addEventListener('timeupdate', () => {
+                const progress = (music.currentTime / music.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+            });
+            
+            // 点击进度条跳转
+            progressBar.parentElement.addEventListener('click', (e) => {
+                const rect = progressBar.parentElement.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                music.currentTime = pos * music.duration;
+            });
+            
+            // 音量控制
+            volumeControl.addEventListener('input', (e) => {
+                music.volume = e.target.value;
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initMusicPlayer();
+        });
+
+        // 添加位置校正函数
+        function correctPosition() {
+            const containerRect = imgContainer.getBoundingClientRect();
+            const imgRect = img.getBoundingClientRect();
+            
+            // 计算图片的实际尺寸（考虑缩放）
+            const scaledWidth = imgRect.width * currentScale;
+            const scaledHeight = imgRect.height * currentScale;
+            
+            // 计算容器和图片的尺寸差
+            const diffX = containerRect.width - scaledWidth;
+            const diffY = containerRect.height - scaledHeight;
+            
+            // 校正X轴位置
+            if (scaledWidth <= containerRect.width) {
+                translateX = 0;
+            } else {
+                const minX = Math.min(0, diffX);
+                const maxX = Math.max(0, -diffX);
+                translateX = Math.min(Math.max(translateX, minX), maxX);
+            }
+            
+            // 校正Y轴位置
+            if (scaledHeight <= containerRect.height) {
+                translateY = 0;
+            } else {
+                const minY = Math.min(0, diffY);
+                const maxY = Math.max(0, -diffY);
+                translateY = Math.min(Math.max(translateY, minY), maxY);
+            }
+            
+            updateImageTransform();
+        }
+
+        // 修改鼠标抬起事件
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                img.style.cursor = 'grab';
+                correctPosition(); // 添加位置校正
+            }
+        });
+
+        // 修改缩放函数
+        function updateScale(newScale) {
+            const oldScale = currentScale;
+            currentScale = Math.min(Math.max(newScale, SCALE_LIMITS.min), SCALE_LIMITS.max);
+            
+            // 调整位移以保持图片在视图中心
+            translateX = translateX * (currentScale / oldScale);
+            translateY = translateY * (currentScale / oldScale);
+            
+            correctPosition(); // 添加位置校正
+            zoomLevel.innerHTML = `${Math.round(currentScale * 100)}%`;
+        }
+
+        // 修改重置函数
+        resetZoom.onclick = (e) => {
+            e.stopPropagation();
+            currentScale = 1;
+            translateX = 0;
+            translateY = 0;
+            correctPosition(); // 添加位置校正
+            zoomLevel.innerHTML = '100%';
+        };
+
+        // 添加窗口大小改变时的处理
+        window.addEventListener('resize', function() {
+            if (document.querySelector('.fullscreen-image-view')) {
+                correctPosition();
+            }
+        });
+
+        // 添加图片加载完成时的处理
+        img.addEventListener('load', function() {
+            correctPosition();
+        });
+
+        // 检查当前显示的是哪个页面
+        function getCurrentPage() {
+            if (document.getElementById('home-page').style.display !== 'none') {
+                return 'home';
+            } else if (document.getElementById('timeline-page').style.display !== 'none') {
+                return 'timeline';
+            } else if (document.getElementById('surprise-page').style.display !== 'none') {
+                return 'surprise';
+            }
+            return 'home'; // 默认返回首页
+        }
+
+        // 更新倒计时的显示/隐藏状态
+        function updateCountdownVisibility() {
+            const countdownWrapper = document.querySelector('.countdown-wrapper');
+            if (!countdownWrapper) return;
+            
+            const currentPage = getCurrentPage();
+            countdownWrapper.style.display = currentPage === 'home' ? 'block' : 'none';
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCountdownVisibility();
+            // 其他初始化代码...
+        });
+
+        // 全局变量声明
+        let isDragging = false;
+        let currentScale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let startX = 0;
+        let startY = 0;
+        let img = null;
+        let zoomLevel = null;
+
+        // 初始化函数
+        function initializeVariables() {
+            img = document.querySelector('.fullscreen-image');
+            zoomLevel = document.querySelector('.zoom-level');
+        }
+
+        // 重置缩放函数
+        function resetZoom() {
+            currentScale = 1;
+            translateX = 0;
+            translateY = 0;
+            
+            const img = document.querySelector('.fullscreen-image');
+            if (img) {
+                img.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+            }
+            
+            const zoomLevel = document.querySelector('.zoom-level');
+            if (zoomLevel) {
+                zoomLevel.innerHTML = '100%';
+            }
+        }
+
+        // 更新图片变换
+        function updateImageTransform() {
+            if (img) {
+                img.style.transform = `scale(${currentScale}) translate(${translateX/currentScale}px, ${translateY/currentScale}px)`;
+            }
+        }
+
+        // 检查当前显示的是哪个页面
+        function getCurrentPage() {
+            if (document.getElementById('home-page').style.display !== 'none') {
+                return 'home';
+            } else if (document.getElementById('timeline-page').style.display !== 'none') {
+                return 'timeline';
+            } else if (document.getElementById('surprise-page').style.display !== 'none') {
+                return 'surprise';
+            }
+            return 'home';
+        }
+
+        // 更新倒计时的显示/隐藏状态
+        function updateCountdownVisibility() {
+            const countdownWrapper = document.querySelector('.countdown-wrapper');
+            if (!countdownWrapper) return;
+            
+            const currentPage = getCurrentPage();
+            countdownWrapper.style.display = currentPage === 'home' ? 'block' : 'none';
+        }
+
+        // 图片拖拽相关函数
+        function startDragging(e) {
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            if (e.target) {
+                e.target.style.cursor = 'grabbing';
+            }
+            e.preventDefault();
+        }
+
+        function stopDragging(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            if (e.target) {
+                e.target.style.cursor = 'grab';
+            }
+        }
+
+        function handleDragging(e) {
+            if (!isDragging) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            updateImageTransform();
+        }
+
+        // 页面切换函数
+        function showHome() {
+            document.getElementById('home-page').style.display = 'block';
+            document.getElementById('timeline-page').style.display = 'none';
+            document.getElementById('surprise-page').style.display = 'none';
+            updateCountdownVisibility();
+        }
+
+        function showTimeline() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('timeline-page').style.display = 'block';
+            document.getElementById('surprise-page').style.display = 'none';
+            updateCountdownVisibility();
+        }
+
+        function showSurprise() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('timeline-page').style.display = 'none';
+            document.getElementById('surprise-page').style.display = 'block';
+            updateCountdownVisibility();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化所有变量
+            initializeVariables();
+            
+            // 更新倒计时显示
+            updateCountdownVisibility();
+            
+            // 添加拖拽事件监听
+            if (img) {
+                img.addEventListener('mousedown', startDragging);
+                document.addEventListener('mousemove', handleDragging);
+                document.addEventListener('mouseup', stopDragging);
+            }
+        });
+
+        // 图片相关操作函数
+        function handleImage() {
+            const img = document.querySelector('.fullscreen-image');
+            if (!img) return;
+
+            // 添加双击重置功能
+            img.addEventListener('dblclick', resetZoom);
+
+            // ... 其他图片操作代码保持不变 ...
+        }
+
+        // 立即执行函数，创建独立的作用域
+        (function() {
+            // 1. 首先声明所有全局变量
+            let isDragging = false;
+            let currentScale = 1;
+            let translateX = 0;
+            let translateY = 0;
+            let startX = 0;
+            let startY = 0;
+
+            // 2. 工具函数
+            function updateImageTransform(img) {
+                if (!img) return;
+                img.style.transform = `scale(${currentScale}) translate(${translateX/currentScale}px, ${translateY/currentScale}px)`;
+            }
+
+            // 3. 重置缩放函数
+            function resetZoom(img, zoomLevel) {
+                currentScale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateImageTransform(img);
+                if (zoomLevel) {
+                    zoomLevel.innerHTML = '100%';
+                }
+            }
+
+            // 4. 拖拽相关函数
+            function startDragging(e, img) {
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                if (img) {
+                    img.style.cursor = 'grabbing';
+                }
+                e.preventDefault();
+            }
+
+            function stopDragging(img) {
+                isDragging = false;
+                if (img) {
+                    img.style.cursor = 'grab';
+                }
+            }
+
+            function handleDragging(e, img) {
+                if (!isDragging) return;
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateImageTransform(img);
+            }
+
+            // 5. 页面切换函数
+            function showHome() {
+                document.getElementById('home-page').style.display = 'block';
+                document.getElementById('timeline-page').style.display = 'none';
+                document.getElementById('surprise-page').style.display = 'none';
+                updateCountdownVisibility();
+            }
+
+            function showTimeline() {
+                document.getElementById('home-page').style.display = 'none';
+                document.getElementById('timeline-page').style.display = 'block';
+                document.getElementById('surprise-page').style.display = 'none';
+                updateCountdownVisibility();
+            }
+
+            function showSurprise() {
+                document.getElementById('home-page').style.display = 'none';
+                document.getElementById('timeline-page').style.display = 'none';
+                document.getElementById('surprise-page').style.display = 'block';
+                updateCountdownVisibility();
+            }
+
+            // 6. 倒计时相关函数
+            function updateCountdownVisibility() {
+                const countdownWrapper = document.querySelector('.countdown-wrapper');
+                if (!countdownWrapper) return;
+                
+                const isHome = document.getElementById('home-page').style.display !== 'none';
+                countdownWrapper.style.display = isHome ? 'block' : 'none';
+            }
+
+            // 7. 初始化函数
+            function initializeImage() {
+                const img = document.querySelector('.fullscreen-image');
+                const zoomLevel = document.querySelector('.zoom-level');
+                
+                if (!img) return;
+
+                // 添加事件监听器
+                img.addEventListener('mousedown', (e) => startDragging(e, img));
+                document.addEventListener('mousemove', (e) => handleDragging(e, img));
+                document.addEventListener('mouseup', () => stopDragging(img));
+                img.addEventListener('dblclick', () => resetZoom(img, zoomLevel));
+            }
+
+            // 8. 页面加载完成后的初始化
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeImage();
+                updateCountdownVisibility();
+                
+                // 将函数暴露到全局作用域（如果需要）
+                window.showHome = showHome;
+                window.showTimeline = showTimeline;
+                window.showSurprise = showSurprise;
+            });
+        })();
+
+        // 添加样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .birthday-message {
+                background: linear-gradient(45deg, #ff69b4, #ff1493, #ff69b4);
+                color: white;
+                font-size: 1.5em;
+                font-weight: bold;
+                padding: 10px 20px;
+                border-radius: 15px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                display: inline-block;
+                animation: pulse 2s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                25% { transform: scale(1.2); }
+                50% { transform: scale(1); }
+                75% { transform: scale(0.8); }
+                100% { transform: scale(1); }
+            }
+
+            .countdown-number {
+                font-weight: bold;
+                color: #ff1493;
+            }
+
+            .countdown-unit {
+                margin-right: 10px;
+            }
+
+            .countdown-text {
+                font-size: 1.2em;
+                text-align: center;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 更新倒计时的函数
+        function updateCountdown() {
+            const countdownText = document.querySelector('.countdown-text');
+            if (!countdownText) return;
+
+            const now = new Date();
+            const targetDate = getNextBirthday();
+            
+            // 如果是生日当天
+            if (isBirthdayPeriod(now, targetDate)) {
+                countdownText.innerHTML = `
+                    <span class="birthday-message">今天是你的生日，祝我的小呆瓜生日快乐🎂✨<br>天天开心，身体健康，万事如意，心想事成<br>我永远爱你💖💘！</span>
+                `;
+                return;
+            }
+
+            const diff = targetDate - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            countdownText.innerHTML = `
+                距离柳儿生日还有
+                <span class="countdown-number">${days}</span><span class="countdown-unit">天</span>
+                <span class="countdown-number">${padZero(hours)}</span><span class="countdown-unit">小时</span>
+                <span class="countdown-number">${padZero(minutes)}</span><span class="countdown-unit">分钟</span>
+                <span class="countdown-number">${padZero(seconds)}</span><span class="countdown-unit">秒</span>
+            `;
+        }
+
+        // 页面加载完成后启动倒计时
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
     </script>
 </body>
 </html>
